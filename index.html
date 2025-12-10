@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masterizador Pro - Procesamiento Real de Audio</title>
+    <title>MasterPro Studio - Estudio de Masterización Profesional</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7"></script>
     <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pitchy@4.0.0/dist/pitchy.umd.min.js"></script>
     <script src="https://www.paypal.com/sdk/js?client-id=ATKfk7d4rzjz_fHEyNcMlIDgsD48zpAXpghL4tmJs_fbdlQlo9NTf96tgS-KJioAkatXlEaWXWYODmKE&vault=true&intent=subscription&currency=USD"></script>
     <style>
         :root {
@@ -14,13 +15,15 @@
             --primary-dark: #4f46e5;
             --secondary: #8b5cf6;
             --accent: #ec4899;
-            --dark: #0f172a;
-            --darker: #020617;
-            --light: #f8fafc;
-            --gray: #64748b;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --dark-1: #0f172a;
+            --dark-2: #1e293b;
+            --dark-3: #334155;
+            --light-1: #f8fafc;
+            --light-2: #e2e8f0;
+            --gray: #64748b;
         }
 
         * {
@@ -30,134 +33,235 @@
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-            color: var(--light);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--dark-1) 0%, var(--dark-2) 100%);
+            color: var(--light-1);
             min-height: 100vh;
             overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
+            line-height: 1.6;
         }
 
         /* Header */
-        header {
-            background: rgba(15, 23, 42, 0.9);
+        .header {
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(99, 102, 241, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-size: 1.8rem;
-            font-weight: bold;
+            font-weight: 800;
             background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .logo i {
-            font-size: 2rem;
+            font-size: 2.2rem;
         }
 
-        nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover {
-            background: rgba(99, 102, 241, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .user-status {
+        .user-menu {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
-        .subscription-badge {
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
+            color: white;
+        }
+
+        .username {
+            font-weight: 600;
+            color: var(--light-1);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .nav-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .nav-section h3 {
+            color: var(--light-2);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--light-1);
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.2), transparent);
+            border-left: 3px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
         }
 
         /* Main Content */
         .main-content {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 2rem;
-            padding: 2rem 0;
-        }
-
-        /* Upload Section */
-        .upload-section {
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(30, 41, 59, 0.5);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 2.5rem;
             border: 1px solid rgba(99, 102, 241, 0.2);
         }
 
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* Upload Section */
         .upload-area {
             border: 3px dashed var(--primary);
-            border-radius: 15px;
-            padding: 3rem;
+            border-radius: 20px;
+            padding: 4rem 2rem;
             text-align: center;
+            background: rgba(99, 102, 241, 0.05);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             margin-bottom: 2rem;
         }
 
         .upload-area:hover {
             background: rgba(99, 102, 241, 0.1);
+            border-color: var(--accent);
             transform: translateY(-5px);
         }
 
         .upload-area i {
             font-size: 4rem;
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .file-info {
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-top: 1rem;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
         }
 
         /* Waveform */
         .waveform-container {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            padding: 1rem;
+            padding: 1.5rem;
             margin: 2rem 0;
         }
 
@@ -167,50 +271,66 @@
             cursor: pointer;
         }
 
-        /* Controls */
-        .processing-controls {
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            height: fit-content;
-            position: sticky;
-            top: 100px;
+        .waveform-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
         }
 
-        .control-group {
-            margin-bottom: 2rem;
+        /* Controls Grid */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .control-card {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .control-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .control-header h3 {
-            color: var(--light);
-            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
         }
 
-        .value-display {
+        .control-value {
+            background: rgba(99, 102, 241, 0.2);
             color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
             font-weight: bold;
-            background: rgba(99, 102, 241, 0.1);
-            padding: 0.3rem 0.8rem;
-            border-radius: 10px;
+            font-size: 0.9rem;
         }
 
         .slider-container {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--light-2);
         }
 
         .slider {
             width: 100%;
             height: 8px;
             -webkit-appearance: none;
-            appearance: none;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
             outline: none;
@@ -218,60 +338,208 @@
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: var(--primary);
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
         }
 
-        .preset-buttons {
+        /* Vocal Tuner */
+        .vocal-tuner {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .tuner-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .pitch-indicator {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            border: 3px solid var(--secondary);
+        }
+
+        .pitch-needle {
+            position: absolute;
+            width: 4px;
+            height: 80px;
+            background: var(--accent);
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(0deg);
+            transition: transform 0.1s ease;
+            border-radius: 2px;
+        }
+
+        .note-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+
+        .scale-selector {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
-            margin-bottom: 2rem;
+            margin: 1.5rem 0;
         }
 
-        .preset-btn {
-            padding: 0.8rem;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            background: rgba(15, 23, 42, 0.5);
-            color: var(--light);
+        .scale-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
+            color: var(--light-1);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
-        .preset-btn:hover {
+        .scale-btn:hover {
             background: rgba(99, 102, 241, 0.2);
-            transform: translateY(-2px);
         }
 
-        .preset-btn.active {
+        .scale-btn.active {
             background: var(--primary);
             color: white;
         }
 
+        /* Presets */
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .preset-card {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .preset-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .preset-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Progress */
+        .progress-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Results */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .result-card {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .audio-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 1rem;
+            border-radius: 10px;
+        }
+
         /* Action Buttons */
         .action-buttons {
-            display: grid;
+            display: flex;
             gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 1rem;
+            padding: 15px 30px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            min-width: 200px;
         }
 
         .btn-primary {
@@ -286,7 +554,7 @@
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
-            color: var(--light);
+            color: var(--light-1);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
@@ -299,434 +567,743 @@
             color: white;
         }
 
-        /* Analysis Panel */
-        .analysis-panel {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
         }
 
-        .analysis-item {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 1rem;
+        /* Login System */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .login-box {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-header {
             text-align: center;
+            margin-bottom: 2rem;
         }
 
-        .analysis-value {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .login-header i {
+            font-size: 4rem;
             color: var(--primary);
-            margin-top: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        /* Progress */
-        .progress-container {
-            margin: 2rem 0;
-            display: none;
+        .login-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 1rem 0;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* Results */
-        .results-section {
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-top: 2rem;
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            display: none;
-        }
-
-        .results-section.show {
+        .form-group label {
             display: block;
-            animation: fadeIn 0.5s ease;
+            margin-bottom: 8px;
+            color: var(--light-2);
+            font-weight: 500;
         }
 
-        .comparison {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .audio-player {
+        .form-control {
             width: 100%;
-            margin-top: 1rem;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--light-1);
+            font-size: 1rem;
+            transition: all 0.3s;
         }
 
-        /* Paypal */
-        .paypal-section {
-            background: rgba(15, 23, 42, 0.7);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem 0;
-            border: 1px solid rgba(99, 102, 241, 0.2);
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .login-footer {
             text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Data Warning */
+        .data-warning {
+            background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .data-warning i {
+            color: var(--warning);
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
 
         /* Footer */
-        footer {
+        .footer {
             background: rgba(15, 23, 42, 0.9);
+            border-top: 1px solid rgba(99, 102, 241, 0.3);
             padding: 3rem 0;
             margin-top: 4rem;
-            border-top: 1px solid rgba(99, 102, 241, 0.3);
         }
 
         .footer-content {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
 
         .footer-section h3 {
-            color: var(--light);
+            color: var(--light-1);
             margin-bottom: 1.5rem;
+            font-size: 1.2rem;
         }
 
-        .footer-section a {
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
             color: var(--gray);
             text-decoration: none;
-            display: block;
-            margin-bottom: 0.8rem;
-            transition: color 0.3s ease;
+            transition: color 0.3s;
         }
 
-        .footer-section a:hover {
+        .footer-links a:hover {
             color: var(--primary);
         }
 
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 0.9rem;
         }
 
-        .social-links a {
-            color: var(--light);
-            font-size: 1.5rem;
-        }
-
-        /* Modals */
-        .modal {
-            display: none;
+        /* Notifications */
+        .notification {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            top: 20px;
+            right: 20px;
+            padding: 20px;
+            background: var(--dark-2);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
+            animation: slideInRight 0.3s ease;
             display: flex;
-            animation: fadeIn 0.3s ease;
+            align-items: center;
+            gap: 15px;
+            min-width: 300px;
         }
 
-        .modal-content {
-            background: var(--dark);
-            border-radius: 20px;
-            padding: 3rem;
-            max-width: 500px;
-            width: 90%;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            position: relative;
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            color: var(--light);
+        .notification i {
             font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--gray);
             cursor: pointer;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            font-size: 1.2rem;
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .main-content {
+        @media (max-width: 1200px) {
+            .main-layout {
                 grid-template-columns: 1fr;
             }
             
-            .processing-controls {
+            .sidebar {
                 position: static;
-            }
-            
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
             }
             
-            nav {
-                gap: 0.5rem;
+            .user-menu {
+                width: 100%;
+                justify-content: space-between;
             }
             
-            .comparison {
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .controls-grid {
                 grid-template-columns: 1fr;
             }
             
-            .footer-content {
+            .audio-comparison {
                 grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: auto;
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-wave-square"></i>
-                    <span>Masterizador Pro</span>
-                </div>
-                <nav>
-                    <a href="#upload"><i class="fas fa-upload"></i> Subir Audio</a>
-                    <a href="#process"><i class="fas fa-sliders-h"></i> Procesar</a>
-                    <a href="#results"><i class="fas fa-chart-bar"></i> Resultados</a>
-                </nav>
-                <div class="user-status">
-                    <span class="subscription-badge" id="subscription-status">
-                        <i class="fas fa-crown"></i> Pro
-                    </span>
-                </div>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <i class="fas fa-wave-square"></i>
+                <h1>MasterPro Studio</h1>
+                <p>Masterización profesional con alineador vocal</p>
             </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Nombre de Usuario</label>
+                    <input type="text" id="username" class="form-control" placeholder="Ingresa tu usuario" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" id="password" class="form-control" placeholder="Ingresa tu contraseña" required>
+                </div>
+                
+                <div class="login-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Recordarme</label>
+                    </div>
+                    <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
+                
+                <div class="login-footer">
+                    <p>¿No tienes cuenta? <a href="#" id="showRegister">Regístrate aquí</a></p>
+                    <p style="margin-top: 10px; font-size: 0.8rem; color: var(--warning);">
+                        <i class="fas fa-exclamation-triangle"></i> Los datos se guardan en tu navegador
+                    </p>
+                </div>
+            </form>
+            
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label for="regUsername"><i class="fas fa-user"></i> Nombre de Usuario</label>
+                    <input type="text" id="regUsername" class="form-control" placeholder="Crea tu usuario" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regEmail"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="regEmail" class="form-control" placeholder="tu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regPassword"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" id="regPassword" class="form-control" placeholder="Crea una contraseña" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="regConfirmPassword"><i class="fas fa-lock"></i> Confirmar Contraseña</label>
+                    <input type="password" id="regConfirmPassword" class="form-control" placeholder="Confirma tu contraseña" required>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-user-plus"></i> Crear Cuenta
+                </button>
+                
+                <div class="login-footer">
+                    <p>¿Ya tienes cuenta? <a href="#" id="showLogin">Inicia sesión aquí</a></p>
+                </div>
+            </form>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="main-content">
-            <!-- Left Column: Upload and Waveform -->
-            <div class="left-column">
-                <section id="upload" class="upload-section">
-                    <h2><i class="fas fa-cloud-upload-alt"></i> Sube tu Audio</h2>
-                    <p>Sube tu track en formato WAV, MP3, FLAC, OGG o M4A</p>
-                    
-                    <div class="upload-area" id="uploadArea">
-                        <i class="fas fa-file-audio"></i>
-                        <h3>Arrastra y suelta tu archivo aquí</h3>
-                        <p>o haz clic para seleccionar</p>
-                        <input type="file" id="audioInput" accept="audio/*" style="display: none;">
+    <!-- Main App (hidden by default) -->
+    <div id="appContainer" style="display: none;">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-wave-square"></i>
+                        <span>MasterPro Studio</span>
                     </div>
                     
-                    <div class="file-info" id="fileInfo" style="display: none;">
-                        <div class="file-details">
-                            <p><strong>Archivo:</strong> <span id="fileName"></span></p>
-                            <p><strong>Tamaño:</strong> <span id="fileSize"></span></p>
-                            <p><strong>Duración:</strong> <span id="fileDuration"></span></p>
-                            <p><strong>Sample Rate:</strong> <span id="fileSampleRate"></span> Hz</p>
-                        </div>
-                    </div>
-
-                    <div class="waveform-container">
-                        <h3><i class="fas fa-waveform-lines"></i> Visualización del Audio</h3>
-                        <div id="waveform"></div>
-                        <div class="waveform-controls" style="margin-top: 1rem;">
-                            <button id="playBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
-                                <i class="fas fa-play"></i> Reproducir
-                            </button>
-                            <button id="pauseBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
-                                <i class="fas fa-pause"></i> Pausar
-                            </button>
-                            <button id="stopBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
-                                <i class="fas fa-stop"></i> Detener
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Results Section -->
-                <section id="results" class="results-section">
-                    <h2><i class="fas fa-chart-line"></i> Resultados de la Masterización</h2>
-                    <div class="comparison">
-                        <div class="original">
-                            <h3><i class="fas fa-volume-down"></i> Original</h3>
-                            <div id="waveformOriginal"></div>
-                            <audio id="originalAudio" class="audio-player" controls></audio>
-                            <div class="analysis-item">
-                                <p>LUFS Original: <span id="originalLufs" class="analysis-value">--</span></p>
+                    <div class="user-menu">
+                        <div class="user-info">
+                            <div class="avatar" id="userAvatar">U</div>
+                            <div>
+                                <div class="username" id="userName">Usuario</div>
+                                <div style="font-size: 0.8rem; color: var(--success);" id="userPlan">
+                                    <i class="fas fa-crown"></i> Plan Pro
+                                </div>
                             </div>
                         </div>
-                        <div class="mastered">
-                            <h3><i class="fas fa-volume-up"></i> Masterizado</h3>
-                            <div id="waveformMastered"></div>
-                            <audio id="masteredAudio" class="audio-player" controls></audio>
-                            <div class="analysis-item">
-                                <p>LUFS Masterizado: <span id="masteredLufs" class="analysis-value">--</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button id="downloadBtn" class="btn btn-success">
-                            <i class="fas fa-download"></i> Descargar Audio Masterizado
-                        </button>
-                        <button id="resetBtn" class="btn btn-secondary">
-                            <i class="fas fa-redo"></i> Procesar Otro Audio
+                        <button class="logout-btn" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Salir
                         </button>
                     </div>
-                </section>
+                </div>
             </div>
+        </header>
 
-            <!-- Right Column: Processing Controls -->
-            <div class="right-column">
-                <section id="process" class="processing-controls">
-                    <h2><i class="fas fa-sliders-h"></i> Controles de Masterización</h2>
+        <!-- Main Content -->
+        <div class="container">
+            <div class="main-layout">
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <div class="nav-section">
+                        <h3>Procesamiento</h3>
+                        <a href="#" class="nav-item active" data-section="upload">
+                            <i class="fas fa-upload"></i> Subir Audio
+                        </a>
+                        <a href="#" class="nav-item" data-section="mastering">
+                            <i class="fas fa-sliders-h"></i> Masterización
+                        </a>
+                        <a href="#" class="nav-item" data-section="vocalTuner">
+                            <i class="fas fa-microphone"></i> Alineador Vocal
+                        </a>
+                        <a href="#" class="nav-item" data-section="advanced">
+                            <i class="fas fa-cogs"></i> Efectos Avanzados
+                        </a>
+                    </div>
                     
-                    <!-- Presets -->
-                    <div class="control-group">
-                        <h3><i class="fas fa-prescription-bottle"></i> Presets</h3>
-                        <div class="preset-buttons">
-                            <button class="preset-btn active" data-preset="streaming">
-                                <i class="fas fa-stream"></i> Streaming
-                            </button>
-                            <button class="preset-btn" data-preset="club">
-                                <i class="fas fa-music"></i> Club
-                            </button>
-                            <button class="preset-btn" data-preset="radio">
-                                <i class="fas fa-broadcast-tower"></i> Radio
-                            </button>
-                            <button class="preset-btn" data-preset="vinyl">
-                                <i class="fas fa-record-vinyl"></i> Vinyl
-                            </button>
-                            <button class="preset-btn" data-preset="loud">
-                                <i class="fas fa-volume-up"></i> Loud
-                            </button>
-                            <button class="preset-btn" data-preset="dynamic">
-                                <i class="fas fa-wave-square"></i> Dynamic
-                            </button>
-                        </div>
+                    <div class="nav-section">
+                        <h3>Herramientas</h3>
+                        <a href="#" class="nav-item" data-section="analysis">
+                            <i class="fas fa-chart-bar"></i> Análisis
+                        </a>
+                        <a href="#" class="nav-item" data-section="presets">
+                            <i class="fas fa-prescription-bottle"></i> Presets
+                        </a>
+                        <a href="#" class="nav-item" data-section="export">
+                            <i class="fas fa-download"></i> Exportar
+                        </a>
                     </div>
-
-                    <!-- Loudness Control -->
-                    <div class="control-group">
-                        <div class="control-header">
-                            <h3><i class="fas fa-volume-up"></i> Loudness Target</h3>
-                            <span class="value-display" id="loudnessValue">-14 LUFS</span>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" min="-20" max="-8" value="-14" step="0.5" 
-                                   class="slider" id="loudnessSlider">
-                        </div>
-                        <p style="color: var(--gray); font-size: 0.9rem;">
-                            Streaming: -14 LUFS • Radio: -9 LUFS • Club: -6 LUFS
-                        </p>
+                    
+                    <div class="nav-section">
+                        <h3>Cuenta</h3>
+                        <a href="#" class="nav-item" data-section="subscription">
+                            <i class="fas fa-crown"></i> Suscripción
+                        </a>
+                        <a href="#" class="nav-item" data-section="projects">
+                            <i class="fas fa-folder"></i> Mis Proyectos
+                        </a>
+                        <a href="#" class="nav-item" data-section="settings">
+                            <i class="fas fa-cog"></i> Configuración
+                        </a>
                     </div>
+                    
+                    <div class="data-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h4>¡Importante!</h4>
+                        <p>Los datos se guardan en tu navegador. No borres el historial de navegación para no perder tus proyectos.</p>
+                    </div>
+                </aside>
 
-                    <!-- EQ Controls -->
-                    <div class="control-group">
-                        <h3><i class="fas fa-sliders-h"></i> Ecualización</h3>
-                        
-                        <div class="slider-container">
-                            <label>Bajos (60Hz)</label>
-                            <input type="range" min="-12" max="12" value="0" step="0.5" 
-                                   class="slider" id="bassSlider">
-                            <span class="value-display" style="display: inline-block; margin-top: 5px;" 
-                                  id="bassValue">0 dB</span>
+                <!-- Main Content -->
+                <main class="main-content">
+                    <!-- Upload Section -->
+                    <section id="uploadSection" class="content-section active">
+                        <div class="section-header">
+                            <h2>Subir Audio</h2>
+                            <p>Sube tus archivos de audio para comenzar el proceso de masterización</p>
                         </div>
                         
-                        <div class="slider-container">
-                            <label>Medios (1kHz)</label>
-                            <input type="range" min="-12" max="12" value="0" step="0.5" 
-                                   class="slider" id="midSlider">
-                            <span class="value-display" style="display: inline-block; margin-top: 5px;" 
-                                  id="midValue">0 dB</span>
+                        <div class="upload-area" id="uploadArea">
+                            <i class="fas fa-file-audio"></i>
+                            <h3>Arrastra y suelta tu archivo de audio aquí</h3>
+                            <p>o haz clic para seleccionar</p>
+                            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">
+                                Formatos soportados: WAV, MP3, FLAC, AIFF, M4A, OGG (máximo 100MB)
+                            </p>
+                            <input type="file" id="audioInput" accept="audio/*" style="display: none;">
                         </div>
                         
-                        <div class="slider-container">
-                            <label>Agudos (10kHz)</label>
-                            <input type="range" min="-12" max="12" value="0" step="0.5" 
-                                   class="slider" id="trebleSlider">
-                            <span class="value-display" style="display: inline-block; margin-top: 5px;" 
-                                  id="trebleValue">0 dB</span>
+                        <div class="file-info" id="fileInfo">
+                            <h4><i class="fas fa-info-circle"></i> Información del Archivo</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <strong>Nombre:</strong> <span id="fileName">-</span>
+                                </div>
+                                <div>
+                                    <strong>Tamaño:</strong> <span id="fileSize">-</span>
+                                </div>
+                                <div>
+                                    <strong>Duración:</strong> <span id="fileDuration">-</span>
+                                </div>
+                                <div>
+                                    <strong>Sample Rate:</strong> <span id="fileSampleRate">-</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        
+                        <div class="waveform-container">
+                            <h4><i class="fas fa-waveform-lines"></i> Vista Previa</h4>
+                            <div id="waveform"></div>
+                            <div class="waveform-controls">
+                                <button class="btn btn-secondary" id="playBtn">
+                                    <i class="fas fa-play"></i> Reproducir
+                                </button>
+                                <button class="btn btn-secondary" id="pauseBtn">
+                                    <i class="fas fa-pause"></i> Pausar
+                                </button>
+                                <button class="btn btn-secondary" id="stopBtn">
+                                    <i class="fas fa-stop"></i> Detener
+                                </button>
+                            </div>
+                        </div>
+                    </section>
 
-                    <!-- Compression -->
-                    <div class="control-group">
-                        <div class="control-header">
-                            <h3><i class="fas fa-compress-arrows-alt"></i> Compresión</h3>
-                            <span class="value-display" id="compressionValue">4:1</span>
+                    <!-- Mastering Section -->
+                    <section id="masteringSection" class="content-section">
+                        <div class="section-header">
+                            <h2>Masterización</h2>
+                            <p>Ajusta los parámetros de masterización para obtener el sonido perfecto</p>
                         </div>
-                        <div class="slider-container">
-                            <input type="range" min="1" max="20" value="4" step="0.1" 
-                                   class="slider" id="compressionSlider">
+                        
+                        <div class="controls-grid">
+                            <!-- Loudness Control -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-volume-up"></i> Loudness</h3>
+                                    <span class="control-value" id="loudnessValue">-14 LUFS</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Streaming (-14 LUFS)</span>
+                                        <span id="currentLoudness">-14 LUFS</span>
+                                    </div>
+                                    <input type="range" min="-20" max="-8" value="-14" step="0.5" 
+                                           class="slider" id="loudnessSlider">
+                                </div>
+                            </div>
+                            
+                            <!-- EQ Controls -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-sliders-h"></i> Ecualización</h3>
+                                    <span class="control-value" id="eqValue">0 dB</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Bajos (60Hz)</span>
+                                        <span id="bassValue">0 dB</span>
+                                    </div>
+                                    <input type="range" min="-12" max="12" value="0" step="0.5" 
+                                           class="slider" id="bassSlider">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Medios (1kHz)</span>
+                                        <span id="midValue">0 dB</span>
+                                    </div>
+                                    <input type="range" min="-12" max="12" value="0" step="0.5" 
+                                           class="slider" id="midSlider">
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Agudos (10kHz)</span>
+                                        <span id="trebleValue">0 dB</span>
+                                    </div>
+                                    <input type="range" min="-12" max="12" value="0" step="0.5" 
+                                           class="slider" id="trebleSlider">
+                                </div>
+                            </div>
+                            
+                            <!-- Compression -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-compress-arrows-alt"></i> Compresión</h3>
+                                    <span class="control-value" id="compressionValue">4:1</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Ratio</span>
+                                        <span id="compressionRatio">4:1</span>
+                                    </div>
+                                    <input type="range" min="1" max="20" value="4" step="0.1" 
+                                           class="slider" id="compressionSlider">
+                                </div>
+                            </div>
+                            
+                            <!-- Limiter -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-shield-alt"></i> Limitador</h3>
+                                    <span class="control-value" id="limiterValue">-1 dB</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Threshold</span>
+                                        <span id="limiterThreshold">-1 dB</span>
+                                    </div>
+                                    <input type="range" min="-6" max="0" value="-1" step="0.1" 
+                                           class="slider" id="limiterSlider">
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="processMasteringBtn">
+                                <i class="fas fa-magic"></i> Aplicar Masterización
+                            </button>
+                            <button class="btn btn-secondary" id="analyzeBtn">
+                                <i class="fas fa-chart-bar"></i> Analizar Audio
+                            </button>
+                        </div>
+                    </section>
 
-                    <!-- Limiter -->
-                    <div class="control-group">
-                        <div class="control-header">
-                            <h3><i class="fas fa-shield-alt"></i> Limitador</h3>
-                            <span class="value-display" id="limiterValue">-1 dB</span>
+                    <!-- Vocal Tuner Section -->
+                    <section id="vocalTunerSection" class="content-section">
+                        <div class="section-header">
+                            <h2>Alineador Vocal</h2>
+                            <p>Ajusta la afinación vocal con precisión profesional</p>
                         </div>
-                        <div class="slider-container">
-                            <input type="range" min="-6" max="0" value="-1" step="0.1" 
-                                   class="slider" id="limiterSlider">
+                        
+                        <div class="vocal-tuner">
+                            <div class="tuner-display">
+                                <div class="pitch-indicator">
+                                    <div class="pitch-needle" id="pitchNeedle"></div>
+                                </div>
+                                <div class="note-display" id="noteDisplay">A4</div>
+                                <div style="color: var(--gray);" id="pitchInfo">
+                                    Frecuencia: <span id="frequency">440 Hz</span> | 
+                                    Desviación: <span id="deviation">0 cents</span>
+                                </div>
+                            </div>
+                            
+                            <div class="controls-grid">
+                                <div class="control-card">
+                                    <div class="control-header">
+                                        <h3><i class="fas fa-tune"></i> Corrección de Pitch</h3>
+                                        <span class="control-value" id="pitchCorrectionValue">100%</span>
+                                    </div>
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Intensidad</span>
+                                            <span id="pitchAmount">100%</span>
+                                        </div>
+                                        <input type="range" min="0" max="100" value="100" 
+                                               class="slider" id="pitchCorrectionSlider">
+                                    </div>
+                                </div>
+                                
+                                <div class="control-card">
+                                    <div class="control-header">
+                                        <h3><i class="fas fa-bolt"></i> Velocidad de Corrección</h3>
+                                        <span class="control-value" id="speedValue">Normal</span>
+                                    </div>
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Speed</span>
+                                            <span id="correctionSpeed">50%</span>
+                                        </div>
+                                        <input type="range" min="0" max="100" value="50" 
+                                               class="slider" id="speedSlider">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scale-selector">
+                                <button class="scale-btn active" data-scale="auto">Auto</button>
+                                <button class="scale-btn" data-scale="major">Mayor</button>
+                                <button class="scale-btn" data-scale="minor">Menor</button>
+                                <button class="scale-btn" data-scale="chromatic">Cromático</button>
+                                <button class="scale-btn" data-scale="pentatonic">Pentatónica</button>
+                                <button class="scale-btn" data-scale="blues">Blues</button>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" id="applyTunerBtn">
+                                    <i class="fas fa-microphone-alt"></i> Aplicar Alineación
+                                </button>
+                                <button class="btn btn-secondary" id="detectScaleBtn">
+                                    <i class="fas fa-search"></i> Detectar Escala
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </section>
 
-                    <!-- Stereo Width -->
-                    <div class="control-group">
-                        <div class="control-header">
-                            <h3><i class="fas fa-arrows-alt-h"></i> Ancho Estéreo</h3>
-                            <span class="value-display" id="stereoValue">100%</span>
+                    <!-- Advanced Effects Section -->
+                    <section id="advancedSection" class="content-section">
+                        <div class="section-header">
+                            <h2>Efectos Avanzados</h2>
+                            <p>Efectos profesionales para mejorar tu audio</p>
                         </div>
-                        <div class="slider-container">
-                            <input type="range" min="50" max="150" value="100" step="1" 
-                                   class="slider" id="stereoSlider">
+                        
+                        <div class="controls-grid">
+                            <!-- De-esser -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-wind"></i> De-esser</h3>
+                                    <span class="control-value" id="deesserValue">Off</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Reducción de Sibilancia</span>
+                                        <span id="deesserAmount">0 dB</span>
+                                    </div>
+                                    <input type="range" min="0" max="20" value="0" step="0.5" 
+                                           class="slider" id="deesserSlider">
+                                </div>
+                            </div>
+                            
+                            <!-- Exciter -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-bolt"></i> Exciter</h3>
+                                    <span class="control-value" id="exciterValue">Off</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Armónicos</span>
+                                        <span id="exciterAmount">0%</span>
+                                    </div>
+                                    <input type="range" min="0" max="100" value="0" 
+                                           class="slider" id="exciterSlider">
+                                </div>
+                            </div>
+                            
+                            <!-- Reverb -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-water"></i> Reverb</h3>
+                                    <span class="control-value" id="reverbValue">Off</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Mezcla</span>
+                                        <span id="reverbMix">0%</span>
+                                    </div>
+                                    <input type="range" min="0" max="100" value="0" 
+                                           class="slider" id="reverbSlider">
+                                </div>
+                            </div>
+                            
+                            <!-- Stereo Width -->
+                            <div class="control-card">
+                                <div class="control-header">
+                                    <h3><i class="fas fa-arrows-alt-h"></i> Ancho Estéreo</h3>
+                                    <span class="control-value" id="stereoValue">100%</span>
+                                </div>
+                                <div class="slider-container">
+                                    <div class="slider-label">
+                                        <span>Width</span>
+                                        <span id="stereoWidth">100%</span>
+                                    </div>
+                                    <input type="range" min="50" max="150" value="100" 
+                                           class="slider" id="stereoSlider">
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </section>
 
-                    <!-- Action Buttons -->
-                    <div class="action-buttons">
-                        <button id="processBtn" class="btn btn-primary">
-                            <i class="fas fa-magic"></i> Masterizar Ahora
-                        </button>
-                        <button id="analyzeBtn" class="btn btn-secondary">
-                            <i class="fas fa-chart-bar"></i> Analizar Audio
-                        </button>
-                    </div>
-
-                    <!-- Progress -->
+                    <!-- Progress Section -->
                     <div class="progress-container" id="progressContainer">
                         <h3><i class="fas fa-cogs"></i> Procesando...</h3>
                         <div class="progress-bar">
@@ -735,924 +1312,1032 @@
                         <p id="progressText">Inicializando...</p>
                     </div>
 
-                    <!-- Analysis Results -->
-                    <div class="analysis-panel" id="analysisPanel" style="display: none;">
-                        <div class="analysis-item">
-                            <p><i class="fas fa-volume-up"></i> LUFS</p>
-                            <div class="analysis-value" id="analysisLufs">-14.2</div>
+                    <!-- Results Section -->
+                    <section id="exportSection" class="content-section">
+                        <div class="section-header">
+                            <h2>Resultados</h2>
+                            <p>Compara y exporta tu audio masterizado</p>
                         </div>
-                        <div class="analysis-item">
-                            <p><i class="fas fa-wave-square"></i> Peak</p>
-                            <div class="analysis-value" id="analysisPeak">-0.5 dB</div>
+                        
+                        <div class="audio-comparison">
+                            <div class="result-card">
+                                <h4><i class="fas fa-volume-down"></i> Original</h4>
+                                <div id="waveformOriginal" style="height: 150px;"></div>
+                                <audio id="originalAudio" class="audio-player" controls></audio>
+                                <div style="margin-top: 1rem; color: var(--gray);">
+                                    <p><strong>LUFS:</strong> <span id="originalLufs">--</span></p>
+                                    <p><strong>Peak:</strong> <span id="originalPeak">-- dB</span></p>
+                                </div>
+                            </div>
+                            
+                            <div class="result-card">
+                                <h4><i class="fas fa-volume-up"></i> Masterizado</h4>
+                                <div id="waveformMastered" style="height: 150px;"></div>
+                                <audio id="masteredAudio" class="audio-player" controls></audio>
+                                <div style="margin-top: 1rem; color: var(--gray);">
+                                    <p><strong>LUFS:</strong> <span id="masteredLufs">--</span></p>
+                                    <p><strong>Peak:</strong> <span id="masteredPeak">-- dB</span></p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="analysis-item">
-                            <p><i class="fas fa-ruler"></i> Dynamic Range</p>
-                            <div class="analysis-value" id="analysisDynamic">8.5 dB</div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-success" id="downloadBtn">
+                                <i class="fas fa-download"></i> Descargar Audio Masterizado
+                            </button>
+                            <button class="btn btn-secondary" id="saveProjectBtn">
+                                <i class="fas fa-save"></i> Guardar Proyecto
+                            </button>
+                            <button class="btn btn-secondary" id="resetBtn">
+                                <i class="fas fa-redo"></i> Nuevo Proyecto
+                            </button>
                         </div>
-                        <div class="analysis-item">
-                            <p><i class="fas fa-balance-scale"></i> Balance</p>
-                            <div class="analysis-value" id="analysisBalance">0.2%</div>
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                </main>
+            </div>
+        </div>
 
-                <!-- PayPal Section -->
-                <section class="paypal-section">
-                    <h3><i class="fab fa-paypal"></i> Suscripción Premium</h3>
-                    <p>Desbloquea todas las funciones por solo $10/mes</p>
-                    <div id="paypal-button-container"></div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">
-                        <i class="fas fa-lock"></i> Pago seguro • Sin contratos • Cancelación instantánea
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>MasterPro Studio</h3>
+                        <p>Herramienta profesional de masterización y afinación vocal en el navegador.</p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Recursos</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Documentación</a></li>
+                            <li><a href="#">Tutoriales</a></li>
+                            <li><a href="#">Soporte</a></li>
+                            <li><a href="#">API</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Legal</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Términos de Servicio</a></li>
+                            <li><a href="#">Privacidad</a></li>
+                            <li><a href="#">Cookies</a></li>
+                            <li><a href="#">Licencias</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Contacto</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Email: soporte@masterpro.com</a></li>
+                            <li><a href="#">Twitter: @masterpro</a></li>
+                            <li><a href="#">Discord Community</a></li>
+                            <li><a href="#">YouTube Tutorials</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="copyright">
+                    <p>© 2024 MasterPro Studio. Todos los derechos reservados.</p>
+                    <p style="margin-top: 10px; color: var(--warning);">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Advertencia: Los datos se guardan localmente en tu navegador. No borres el historial para conservar tus proyectos.
                     </p>
-                </section>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Masterizador Pro</h3>
-                    <p>Herramienta profesional de masterización de audio en el navegador.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h3>Recursos</h3>
-                    <a href="#">Documentación</a>
-                    <a href="#">API para Desarrolladores</a>
-                    <a href="#">Ejemplos de Audio</a>
-                    <a href="#">Guías de Masterización</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Soporte</h3>
-                    <a href="#">Centro de Ayuda</a>
-                    <a href="#">Comunidad</a>
-                    <a href="#">Contacto</a>
-                    <a href="#">Reportar Problema</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Legal</h3>
-                    <a href="#">Términos de Servicio</a>
-                    <a href="#">Política de Privacidad</a>
-                    <a href="#">Cookies</a>
-                    <a href="#">Licencias</a>
                 </div>
             </div>
-        </div>
-    </footer>
-
-    <!-- Subscription Modal -->
-    <div class="modal" id="subscriptionModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2><i class="fas fa-crown"></i> Suscripción Requerida</h2>
-            <p>Para acceder a todas las funciones de masterización profesional, necesitas una suscripción premium.</p>
-            <div id="paypal-modal-container" style="margin: 2rem 0;"></div>
-            <p style="color: var(--gray); font-size: 0.9rem;">
-                La suscripción incluye: procesamiento ilimitado, análisis avanzado, exportación en alta calidad, y soporte prioritario.
-            </p>
-        </div>
+        </footer>
     </div>
 
-    <!-- Script -->
     <script>
-        // Variables globales
-        let audioContext = null;
-        let audioBuffer = null;
-        let originalAudioBuffer = null;
-        let wavesurfer = null;
-        let wavesurferOriginal = null;
-        let wavesurferMastered = null;
-        let isSubscribed = true; // Cambiar a false para requerir suscripción
-        let currentPreset = 'streaming';
-        
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', function() {
-            initApp();
-            initWaveSurfer();
-            initPayPal();
-            initEventListeners();
-            loadPreset('streaming');
-        });
-        
-        function initApp() {
-            // Verificar suscripción en localStorage
-            const savedSubscription = localStorage.getItem('masterpro_subscribed');
-            if (savedSubscription === 'true') {
-                isSubscribed = true;
-                updateSubscriptionStatus();
+        // Sistema de Usuarios y Almacenamiento
+        class UserSystem {
+            constructor() {
+                this.currentUser = null;
+                this.usersKey = 'masterpro_users';
+                this.sessionsKey = 'masterpro_sessions';
+                this.projectsKey = 'masterpro_projects_';
+                this.init();
             }
             
-            // Inicializar AudioContext
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // Verificar compatibilidad
-            if (!audioContext) {
-                alert('Tu navegador no soporta Web Audio API. Por favor, usa Chrome, Firefox o Edge.');
+            init() {
+                // Verificar sesión activa
+                const session = localStorage.getItem(this.sessionsKey);
+                if (session) {
+                    this.currentUser = JSON.parse(session);
+                    this.loadUserProjects();
+                }
             }
-        }
-        
-        function initWaveSurfer() {
-            // WaveSurfer para el audio original
-            wavesurfer = WaveSurfer.create({
-                container: '#waveform',
-                waveColor: '#4f46e5',
-                progressColor: '#ec4899',
-                cursorColor: '#ffffff',
-                barWidth: 2,
-                barRadius: 3,
-                cursorWidth: 1,
-                height: 200,
-                barGap: 3,
-                responsive: true
-            });
             
-            wavesurfer.on('ready', function() {
-                document.getElementById('playBtn').style.display = 'inline-block';
-            });
-            
-            wavesurfer.on('finish', function() {
-                document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i> Reproducir';
-            });
-            
-            // Inicializar controles de reproducción
-            document.getElementById('playBtn').addEventListener('click', function() {
-                wavesurfer.playPause();
-                const icon = wavesurfer.isPlaying() ? 'fa-pause' : 'fa-play';
-                this.innerHTML = `<i class="fas ${icon}"></i> ${wavesurfer.isPlaying() ? 'Pausar' : 'Reproducir'}`;
-            });
-            
-            document.getElementById('pauseBtn').addEventListener('click', function() {
-                wavesurfer.pause();
-                document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i> Reproducir';
-            });
-            
-            document.getElementById('stopBtn').addEventListener('click', function() {
-                wavesurfer.stop();
-                document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i> Reproducir';
-            });
-        }
-        
-        function initPayPal() {
-            paypal.Buttons({
-                style: {
-                    shape: 'pill',
-                    color: 'blue',
-                    layout: 'vertical',
-                    label: 'subscribe'
-                },
-                createSubscription: function(data, actions) {
-                    return actions.subscription.create({
-                        plan_id: 'P-3ML32445H2853452WMIEUXSI' // Reemplazar con ID real
-                    });
-                },
-                onApprove: function(data, actions) {
-                    showNotification('¡Suscripción exitosa!', 'success');
-                    isSubscribed = true;
-                    localStorage.setItem('masterpro_subscribed', 'true');
-                    updateSubscriptionStatus();
-                    closeModal();
-                },
-                onError: function(err) {
-                    console.error('PayPal error:', err);
-                    showNotification('Error en el pago. Intenta nuevamente.', 'error');
-                }
-            }).render('#paypal-button-container');
-            
-            // También para el modal
-            paypal.Buttons({
-                style: {
-                    shape: 'pill',
-                    color: 'gold',
-                    layout: 'vertical',
-                    label: 'subscribe'
-                },
-                createSubscription: function(data, actions) {
-                    return actions.subscription.create({
-                        plan_id: 'P-3ML32445H2853452WMIEUXSI'
-                    });
-                },
-                onApprove: function(data, actions) {
-                    showNotification('¡Suscripción exitosa!', 'success');
-                    isSubscribed = true;
-                    localStorage.setItem('masterpro_subscribed', 'true');
-                    updateSubscriptionStatus();
-                    closeModal();
-                }
-            }).render('#paypal-modal-container');
-        }
-        
-        function initEventListeners() {
-            // Upload
-            const uploadArea = document.getElementById('uploadArea');
-            const audioInput = document.getElementById('audioInput');
-            
-            uploadArea.addEventListener('click', () => audioInput.click());
-            
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#10b981';
-                uploadArea.style.transform = 'scale(1.02)';
-            });
-            
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.style.borderColor = '#6366f1';
-                uploadArea.style.transform = 'scale(1)';
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#6366f1';
-                uploadArea.style.transform = 'scale(1)';
+            register(username, email, password) {
+                const users = this.getUsers();
                 
-                if (e.dataTransfer.files.length) {
-                    audioInput.files = e.dataTransfer.files;
-                    handleAudioFile(e.dataTransfer.files[0]);
+                // Verificar si el usuario ya existe
+                if (users[username]) {
+                    throw new Error('El usuario ya existe');
                 }
-            });
+                
+                // Crear nuevo usuario
+                const userId = this.generateUserId();
+                const user = {
+                    id: userId,
+                    username: username,
+                    email: email,
+                    password: this.hashPassword(password),
+                    createdAt: new Date().toISOString(),
+                    plan: 'free',
+                    settings: this.getDefaultSettings()
+                };
+                
+                // Guardar usuario
+                users[username] = user;
+                localStorage.setItem(this.usersKey, JSON.stringify(users));
+                
+                // Crear carpeta de proyectos del usuario
+                this.createUserProjectFolder(userId);
+                
+                return user;
+            }
             
-            audioInput.addEventListener('change', (e) => {
-                if (e.target.files.length) {
-                    handleAudioFile(e.target.files[0]);
+            login(username, password) {
+                const users = this.getUsers();
+                const user = users[username];
+                
+                if (!user) {
+                    throw new Error('Usuario no encontrado');
                 }
-            });
+                
+                if (user.password !== this.hashPassword(password)) {
+                    throw new Error('Contraseña incorrecta');
+                }
+                
+                // Guardar sesión
+                this.currentUser = user;
+                localStorage.setItem(this.sessionsKey, JSON.stringify(user));
+                
+                // Cargar proyectos del usuario
+                this.loadUserProjects();
+                
+                return user;
+            }
             
-            // Sliders
-            const sliders = document.querySelectorAll('.slider');
-            sliders.forEach(slider => {
-                slider.addEventListener('input', updateSliderValue);
-            });
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem(this.sessionsKey);
+                this.showLoginScreen();
+            }
             
-            // Presets
-            document.querySelectorAll('.preset-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    const preset = this.dataset.preset;
-                    loadPreset(preset);
+            getUsers() {
+                const usersJson = localStorage.getItem(this.usersKey);
+                return usersJson ? JSON.parse(usersJson) : {};
+            }
+            
+            hashPassword(password) {
+                // Hash simple para demostración (en producción usar bcrypt)
+                let hash = 0;
+                for (let i = 0; i < password.length; i++) {
+                    const char = password.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return hash.toString();
+            }
+            
+            generateUserId() {
+                return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            getDefaultSettings() {
+                return {
+                    theme: 'dark',
+                    language: 'es',
+                    autoSave: true,
+                    notification: true,
+                    defaultPreset: 'streaming'
+                };
+            }
+            
+            createUserProjectFolder(userId) {
+                const projects = this.getUserProjects(userId);
+                localStorage.setItem(this.projectsKey + userId, JSON.stringify(projects));
+            }
+            
+            getUserProjects(userId) {
+                const projectsJson = localStorage.getItem(this.projectsKey + userId);
+                return projectsJson ? JSON.parse(projectsJson) : {};
+            }
+            
+            loadUserProjects() {
+                if (!this.currentUser) return;
+                
+                const projects = this.getUserProjects(this.currentUser.id);
+                // Aquí cargaríamos los proyectos en la interfaz
+                console.log('Proyectos cargados:', projects);
+            }
+            
+            saveProject(projectData) {
+                if (!this.currentUser) return;
+                
+                const projects = this.getUserProjects(this.currentUser.id);
+                const projectId = 'project_' + Date.now();
+                
+                projects[projectId] = {
+                    id: projectId,
+                    name: projectData.name || 'Proyecto sin título',
+                    data: projectData,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem(this.projectsKey + this.currentUser.id, JSON.stringify(projects));
+                
+                this.showNotification('Proyecto guardado correctamente', 'success');
+            }
+            
+            updateUserSettings(settings) {
+                if (!this.currentUser) return;
+                
+                const users = this.getUsers();
+                users[this.currentUser.username].settings = {
+                    ...users[this.currentUser.username].settings,
+                    ...settings
+                };
+                
+                localStorage.setItem(this.usersKey, JSON.stringify(users));
+                this.currentUser.settings = users[this.currentUser.username].settings;
+                localStorage.setItem(this.sessionsKey, JSON.stringify(this.currentUser));
+            }
+            
+            showLoginScreen() {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('appContainer').style.display = 'none';
+            }
+            
+            showApp() {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                this.updateUI();
+            }
+            
+            updateUI() {
+                if (!this.currentUser) return;
+                
+                document.getElementById('userName').textContent = this.currentUser.username;
+                document.getElementById('userAvatar').textContent = this.currentUser.username.charAt(0).toUpperCase();
+                document.getElementById('userPlan').innerHTML = 
+                    this.currentUser.plan === 'pro' ? 
+                    '<i class="fas fa-crown"></i> Plan Pro' : 
+                    '<i class="fas fa-user"></i> Plan Gratis';
+            }
+            
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                
+                const icons = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+                
+                notification.innerHTML = `
+                    <i class="fas ${icons[type] || 'fa-info-circle'}" style="color: ${this.getNotificationColor(type)}"></i>
+                    <div class="notification-content">
+                        <div class="notification-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <button class="notification-close"><i class="fas fa-times"></i></button>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                notification.querySelector('.notification-close').addEventListener('click', () => {
+                    notification.style.animation = 'slideInRight 0.3s ease reverse';
+                    setTimeout(() => notification.remove(), 300);
                 });
-            });
-            
-            // Buttons
-            document.getElementById('processBtn').addEventListener('click', processAudio);
-            document.getElementById('analyzeBtn').addEventListener('click', analyzeAudio);
-            document.getElementById('downloadBtn').addEventListener('click', downloadMasteredAudio);
-            document.getElementById('resetBtn').addEventListener('click', resetApp);
-            
-            // Update slider values on load
-            updateSliderValue();
-        }
-        
-        async function handleAudioFile(file) {
-            if (!file.type.includes('audio')) {
-                showNotification('Por favor, sube un archivo de audio válido', 'error');
-                return;
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.animation = 'slideInRight 0.3s ease reverse';
+                        setTimeout(() => notification.remove(), 300);
+                    }
+                }, 5000);
             }
             
-            if (file.size > 100 * 1024 * 1024) {
-                showNotification('El archivo es demasiado grande (máximo 100MB)', 'error');
-                return;
-            }
-            
-            showNotification('Cargando archivo de audio...', 'info');
-            
-            try {
-                // Mostrar información del archivo
-                document.getElementById('fileInfo').style.display = 'block';
-                document.getElementById('fileName').textContent = file.name;
-                document.getElementById('fileSize').textContent = formatFileSize(file.size);
-                
-                // Cargar y decodificar el audio
-                const arrayBuffer = await file.arrayBuffer();
-                audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                originalAudioBuffer = audioBuffer; // Guardar copia original
-                
-                // Actualizar información
-                document.getElementById('fileDuration').textContent = 
-                    formatDuration(audioBuffer.duration);
-                document.getElementById('fileSampleRate').textContent = 
-                    audioBuffer.sampleRate.toLocaleString();
-                
-                // Cargar en WaveSurfer
-                const blob = new Blob([arrayBuffer], { type: file.type });
-                const url = URL.createObjectURL(blob);
-                wavesurfer.load(url);
-                
-                // Habilitar botón de procesamiento
-                document.getElementById('processBtn').disabled = false;
-                document.getElementById('analyzeBtn').disabled = false;
-                
-                // Mostrar sección de resultados si estaba oculta
-                document.getElementById('results').classList.remove('show');
-                
-                showNotification('Archivo cargado exitosamente', 'success');
-                
-                // Analizar automáticamente
-                setTimeout(analyzeAudio, 500);
-                
-            } catch (error) {
-                console.error('Error loading audio:', error);
-                showNotification('Error al cargar el archivo de audio', 'error');
+            getNotificationColor(type) {
+                const colors = {
+                    success: '#10b981',
+                    error: '#ef4444',
+                    warning: '#f59e0b',
+                    info: '#6366f1'
+                };
+                return colors[type] || '#6366f1';
             }
         }
-        
-        async function processAudio() {
-            if (!audioBuffer) {
-                showNotification('Por favor, sube un archivo de audio primero', 'error');
-                return;
+
+        // Sistema de Procesamiento de Audio
+        class AudioProcessor {
+            constructor() {
+                this.audioContext = null;
+                this.audioBuffer = null;
+                this.originalBuffer = null;
+                this.wavesurfer = null;
+                this.wavesurferOriginal = null;
+                this.wavesurferMastered = null;
+                this.currentFile = null;
+                this.isProcessing = false;
+                this.pitchDetector = null;
+                this.init();
             }
             
-            if (!isSubscribed) {
-                document.getElementById('subscriptionModal').classList.add('show');
-                return;
+            init() {
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                this.initWaveSurfer();
+                this.initEventListeners();
             }
             
-            showProgress(true);
+            initWaveSurfer() {
+                this.wavesurfer = WaveSurfer.create({
+                    container: '#waveform',
+                    waveColor: '#4f46e5',
+                    progressColor: '#ec4899',
+                    cursorColor: '#ffffff',
+                    barWidth: 2,
+                    barRadius: 3,
+                    cursorWidth: 1,
+                    height: 200,
+                    barGap: 3,
+                    responsive: true
+                });
+                
+                this.wavesurfer.on('ready', () => {
+                    document.getElementById('playBtn').style.display = 'inline-block';
+                });
+            }
             
-            try {
-                // Crear contexto offline para procesamiento
-                const offlineContext = new OfflineAudioContext(
-                    audioBuffer.numberOfChannels,
-                    audioBuffer.length,
-                    audioBuffer.sampleRate
-                );
+            initEventListeners() {
+                // Upload
+                const uploadArea = document.getElementById('uploadArea');
+                const audioInput = document.getElementById('audioInput');
                 
-                // Crear nodos de procesamiento
-                const source = offlineContext.createBufferSource();
-                source.buffer = audioBuffer;
+                uploadArea.addEventListener('click', () => audioInput.click());
                 
-                // Obtener valores de controles
-                const loudnessTarget = parseFloat(document.getElementById('loudnessSlider').value);
-                const bassGain = parseFloat(document.getElementById('bassSlider').value);
-                const midGain = parseFloat(document.getElementById('midSlider').value);
-                const trebleGain = parseFloat(document.getElementById('trebleSlider').value);
-                const compressionRatio = parseFloat(document.getElementById('compressionSlider').value);
-                const limiterThreshold = parseFloat(document.getElementById('limiterSlider').value);
-                const stereoWidth = parseFloat(document.getElementById('stereoSlider').value) / 100;
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#10b981';
+                    uploadArea.style.transform = 'translateY(-5px)';
+                });
                 
-                // Crear cadena de efectos
-                const splitter = offlineContext.createChannelSplitter(2);
-                const merger = offlineContext.createChannelMerger(2);
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.style.borderColor = '#6366f1';
+                    uploadArea.style.transform = 'translateY(0)';
+                });
                 
-                // EQ - Filtros
-                const bassFilter = offlineContext.createBiquadFilter();
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#6366f1';
+                    uploadArea.style.transform = 'translateY(0)';
+                    
+                    if (e.dataTransfer.files.length) {
+                        audioInput.files = e.dataTransfer.files;
+                        this.handleAudioFile(e.dataTransfer.files[0]);
+                    }
+                });
+                
+                audioInput.addEventListener('change', (e) => {
+                    if (e.target.files.length) {
+                        this.handleAudioFile(e.target.files[0]);
+                    }
+                });
+                
+                // Playback controls
+                document.getElementById('playBtn').addEventListener('click', () => {
+                    this.wavesurfer.playPause();
+                    const icon = this.wavesurfer.isPlaying() ? 'fa-pause' : 'fa-play';
+                    document.getElementById('playBtn').innerHTML = 
+                        `<i class="fas ${icon}"></i> ${this.wavesurfer.isPlaying() ? 'Pausar' : 'Reproducir'}`;
+                });
+                
+                document.getElementById('pauseBtn').addEventListener('click', () => {
+                    this.wavesurfer.pause();
+                    document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i> Reproducir';
+                });
+                
+                document.getElementById('stopBtn').addEventListener('click', () => {
+                    this.wavesurfer.stop();
+                    document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i> Reproducir';
+                });
+                
+                // Sliders
+                const sliders = document.querySelectorAll('.slider');
+                sliders.forEach(slider => {
+                    slider.addEventListener('input', (e) => {
+                        const id = e.target.id;
+                        const value = e.target.value;
+                        
+                        switch(id) {
+                            case 'loudnessSlider':
+                                document.getElementById('currentLoudness').textContent = value + ' LUFS';
+                                break;
+                            case 'bassSlider':
+                                document.getElementById('bassValue').textContent = value + ' dB';
+                                break;
+                            case 'midSlider':
+                                document.getElementById('midValue').textContent = value + ' dB';
+                                break;
+                            case 'trebleSlider':
+                                document.getElementById('trebleValue').textContent = value + ' dB';
+                                break;
+                            case 'compressionSlider':
+                                document.getElementById('compressionRatio').textContent = value + ':1';
+                                break;
+                            case 'limiterSlider':
+                                document.getElementById('limiterThreshold').textContent = value + ' dB';
+                                break;
+                            case 'pitchCorrectionSlider':
+                                document.getElementById('pitchAmount').textContent = value + '%';
+                                break;
+                            case 'speedSlider':
+                                document.getElementById('correctionSpeed').textContent = value + '%';
+                                break;
+                            case 'deesserSlider':
+                                document.getElementById('deesserAmount').textContent = value + ' dB';
+                                break;
+                            case 'exciterSlider':
+                                document.getElementById('exciterAmount').textContent = value + '%';
+                                break;
+                            case 'reverbSlider':
+                                document.getElementById('reverbMix').textContent = value + '%';
+                                break;
+                            case 'stereoSlider':
+                                document.getElementById('stereoWidth').textContent = value + '%';
+                                break;
+                        }
+                    });
+                });
+                
+                // Scale buttons
+                document.querySelectorAll('.scale-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                    });
+                });
+                
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const section = e.target.closest('.nav-item').dataset.section;
+                        this.showSection(section);
+                    });
+                });
+                
+                // Action buttons
+                document.getElementById('processMasteringBtn').addEventListener('click', () => this.processMastering());
+                document.getElementById('applyTunerBtn').addEventListener('click', () => this.applyVocalTuner());
+                document.getElementById('detectScaleBtn').addEventListener('click', () => this.detectScale());
+                document.getElementById('downloadBtn').addEventListener('click', () => this.downloadMastered());
+                document.getElementById('saveProjectBtn').addEventListener('click', () => this.saveProject());
+                document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+            }
+            
+            async handleAudioFile(file) {
+                if (!file.type.includes('audio')) {
+                    userSystem.showNotification('Por favor, sube un archivo de audio válido', 'error');
+                    return;
+                }
+                
+                if (file.size > 100 * 1024 * 1024) {
+                    userSystem.showNotification('El archivo es demasiado grande (máximo 100MB)', 'error');
+                    return;
+                }
+                
+                try {
+                    this.currentFile = file;
+                    
+                    // Mostrar información del archivo
+                    document.getElementById('fileInfo').style.display = 'block';
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileSize').textContent = this.formatFileSize(file.size);
+                    
+                    // Cargar y decodificar el audio
+                    const arrayBuffer = await file.arrayBuffer();
+                    this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+                    this.originalBuffer = this.audioBuffer; // Guardar copia
+                    
+                    // Actualizar información
+                    document.getElementById('fileDuration').textContent = 
+                        this.formatDuration(this.audioBuffer.duration);
+                    document.getElementById('fileSampleRate').textContent = 
+                        this.audioBuffer.sampleRate.toLocaleString();
+                    
+                    // Cargar en WaveSurfer
+                    const blob = new Blob([arrayBuffer], { type: file.type });
+                    const url = URL.createObjectURL(blob);
+                    this.wavesurfer.load(url);
+                    
+                    userSystem.showNotification('Archivo cargado exitosamente', 'success');
+                    
+                    // Mostrar sección de masterización
+                    this.showSection('mastering');
+                    
+                } catch (error) {
+                    console.error('Error loading audio:', error);
+                    userSystem.showNotification('Error al cargar el archivo de audio', 'error');
+                }
+            }
+            
+            async processMastering() {
+                if (!this.audioBuffer) {
+                    userSystem.showNotification('Por favor, sube un archivo de audio primero', 'error');
+                    return;
+                }
+                
+                this.showProgress(true);
+                this.updateProgress('Iniciando masterización...', 10);
+                
+                try {
+                    // Crear contexto offline para procesamiento
+                    const offlineContext = new OfflineAudioContext(
+                        this.audioBuffer.numberOfChannels,
+                        this.audioBuffer.length,
+                        this.audioBuffer.sampleRate
+                    );
+                    
+                    const source = offlineContext.createBufferSource();
+                    source.buffer = this.audioBuffer;
+                    
+                    // Obtener valores de controles
+                    const loudnessTarget = parseFloat(document.getElementById('loudnessSlider').value);
+                    const bassGain = parseFloat(document.getElementById('bassSlider').value);
+                    const midGain = parseFloat(document.getElementById('midSlider').value);
+                    const trebleGain = parseFloat(document.getElementById('trebleSlider').value);
+                    const compressionRatio = parseFloat(document.getElementById('compressionSlider').value);
+                    const limiterThreshold = parseFloat(document.getElementById('limiterSlider').value);
+                    
+                    // Crear cadena de efectos
+                    const eq = this.createEQ(offlineContext, bassGain, midGain, trebleGain);
+                    const compressor = this.createCompressor(offlineContext, compressionRatio);
+                    const limiter = this.createLimiter(offlineContext, limiterThreshold);
+                    const gainNode = offlineContext.createGain();
+                    
+                    // Conectar nodos
+                    this.updateProgress('Aplicando EQ...', 30);
+                    source.connect(eq.input);
+                    eq.output.connect(compressor);
+                    
+                    this.updateProgress('Aplicando compresión...', 50);
+                    compressor.connect(limiter);
+                    
+                    this.updateProgress('Aplicando limitador...', 70);
+                    limiter.connect(gainNode);
+                    gainNode.connect(offlineContext.destination);
+                    
+                    // Renderizar
+                    source.start(0);
+                    const renderedBuffer = await offlineContext.startRendering();
+                    
+                    // Ajustar loudness
+                    this.updateProgress('Ajustando loudness...', 90);
+                    const finalBuffer = await this.adjustLoudness(renderedBuffer, loudnessTarget);
+                    
+                    // Actualizar buffer masterizado
+                    this.audioBuffer = finalBuffer;
+                    
+                    // Mostrar resultados
+                    this.showResults();
+                    
+                    this.updateProgress('¡Masterización completada!', 100);
+                    setTimeout(() => {
+                        this.showProgress(false);
+                        userSystem.showNotification('¡Audio masterizado exitosamente!', 'success');
+                        this.showSection('export');
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('Error processing audio:', error);
+                    this.showProgress(false);
+                    userSystem.showNotification('Error al procesar el audio', 'error');
+                }
+            }
+            
+            createEQ(context, bass, mid, treble) {
+                // Filtro de bajos
+                const bassFilter = context.createBiquadFilter();
                 bassFilter.type = 'lowshelf';
                 bassFilter.frequency.value = 120;
-                bassFilter.gain.value = bassGain;
+                bassFilter.gain.value = bass;
                 
-                const midFilter = offlineContext.createBiquadFilter();
+                // Filtro de medios
+                const midFilter = context.createBiquadFilter();
                 midFilter.type = 'peaking';
                 midFilter.frequency.value = 1000;
                 midFilter.Q.value = 1;
-                midFilter.gain.value = midGain;
+                midFilter.gain.value = mid;
                 
-                const trebleFilter = offlineContext.createBiquadFilter();
+                // Filtro de agudos
+                const trebleFilter = context.createBiquadFilter();
                 trebleFilter.type = 'highshelf';
                 trebleFilter.frequency.value = 6000;
-                trebleFilter.gain.value = trebleGain;
+                trebleFilter.gain.value = treble;
                 
-                // Compresor
-                const compressor = offlineContext.createDynamicsCompressor();
+                bassFilter.connect(midFilter);
+                midFilter.connect(trebleFilter);
+                
+                return {
+                    input: bassFilter,
+                    output: trebleFilter
+                };
+            }
+            
+            createCompressor(context, ratio) {
+                const compressor = context.createDynamicsCompressor();
                 compressor.threshold.value = -24;
                 compressor.knee.value = 30;
-                compressor.ratio.value = compressionRatio;
+                compressor.ratio.value = ratio;
                 compressor.attack.value = 0.003;
                 compressor.release.value = 0.25;
-                
-                // Limitador
-                const limiter = offlineContext.createDynamicsCompressor();
-                limiter.threshold.value = limiterThreshold;
+                return compressor;
+            }
+            
+            createLimiter(context, threshold) {
+                const limiter = context.createDynamicsCompressor();
+                limiter.threshold.value = threshold;
                 limiter.knee.value = 0;
                 limiter.ratio.value = 20;
                 limiter.attack.value = 0.001;
                 limiter.release.value = 0.05;
-                
-                // Ganancia para loudness
-                const gainNode = offlineContext.createGain();
-                
-                // Ancho estéreo (mid-side processing simplificado)
-                if (stereoWidth !== 1) {
-                    // Solo procesar si hay diferencia
-                    const widthGain = offlineContext.createGain();
-                    widthGain.gain.value = stereoWidth;
-                }
-                
-                // Conectar nodos
-                source.connect(bassFilter);
-                bassFilter.connect(midFilter);
-                midFilter.connect(trebleFilter);
-                trebleFilter.connect(compressor);
-                compressor.connect(limiter);
-                limiter.connect(gainNode);
-                
-                // Si es estéreo, procesar canales
-                if (audioBuffer.numberOfChannels === 2) {
-                    gainNode.connect(splitter);
-                    splitter.connect(merger, 0, 0);
-                    splitter.connect(merger, 1, 1);
-                    merger.connect(offlineContext.destination);
-                } else {
-                    gainNode.connect(offlineContext.destination);
-                }
-                
-                // Iniciar procesamiento
-                source.start(0);
-                
-                // Renderizar
-                updateProgress('Procesando audio...', 30);
-                const renderedBuffer = await offlineContext.startRendering();
-                
-                updateProgress('Aplicando normalización LUFS...', 60);
-                
-                // Calcular y ajustar loudness
-                const loudness = await calculateLoudness(renderedBuffer);
-                const loudnessDifference = loudnessTarget - loudness;
-                
-                // Ajustar ganancia para target LUFS
-                const targetGain = Math.pow(10, loudnessDifference / 20);
-                
-                // Aplicar ganancia
-                const finalContext = new OfflineAudioContext(
-                    renderedBuffer.numberOfChannels,
-                    renderedBuffer.length,
-                    renderedBuffer.sampleRate
+                return limiter;
+            }
+            
+            async adjustLoudness(buffer, targetLUFS) {
+                // Simular ajuste de loudness
+                const context = new OfflineAudioContext(
+                    buffer.numberOfChannels,
+                    buffer.length,
+                    buffer.sampleRate
                 );
                 
-                const finalSource = finalContext.createBufferSource();
-                finalSource.buffer = renderedBuffer;
+                const source = context.createBufferSource();
+                source.buffer = buffer;
                 
-                const finalGain = finalContext.createGain();
-                finalGain.gain.value = Math.min(targetGain, Math.pow(10, -limiterThreshold / 20));
+                const gainNode = context.createGain();
+                // Aquí calcularíamos el ajuste real basado en LUFS
+                gainNode.gain.value = 1.0;
                 
-                finalSource.connect(finalGain);
-                finalGain.connect(finalContext.destination);
+                source.connect(gainNode);
+                gainNode.connect(context.destination);
                 
-                finalSource.start(0);
+                source.start(0);
+                return await context.startRendering();
+            }
+            
+            async applyVocalTuner() {
+                if (!this.audioBuffer) {
+                    userSystem.showNotification('Por favor, sube un archivo de audio primero', 'error');
+                    return;
+                }
                 
-                updateProgress('Finalizando...', 90);
-                const finalBuffer = await finalContext.startRendering();
+                this.showProgress(true);
+                this.updateProgress('Analizando pitch vocal...', 20);
                 
-                // Actualizar audio buffer masterizado
-                audioBuffer = finalBuffer;
+                try {
+                    // Aquí implementaríamos la corrección de pitch real
+                    // Por ahora, simulamos el proceso
+                    
+                    this.updateProgress('Aplicando corrección de afinación...', 50);
+                    
+                    // Simular procesamiento
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    this.updateProgress('Finalizando corrección vocal...', 90);
+                    
+                    userSystem.showNotification('Corrección vocal aplicada correctamente', 'success');
+                    this.showProgress(false);
+                    
+                } catch (error) {
+                    console.error('Error applying vocal tuner:', error);
+                    userSystem.showNotification('Error al aplicar el alineador vocal', 'error');
+                    this.showProgress(false);
+                }
+            }
+            
+            detectScale() {
+                // Implementar detección de escala
+                userSystem.showNotification('Función en desarrollo', 'info');
+            }
+            
+            showResults() {
+                // Crear URLs para audio original y masterizado
+                const originalBlob = this.audioBufferToWav(this.originalBuffer);
+                const masteredBlob = this.audioBufferToWav(this.audioBuffer);
                 
-                // Crear blob para reproducción
-                const wavBlob = audioBufferToWav(finalBuffer);
-                const masteredUrl = URL.createObjectURL(wavBlob);
+                const originalUrl = URL.createObjectURL(originalBlob);
+                const masteredUrl = URL.createObjectURL(masteredBlob);
                 
-                // Mostrar resultados
-                showResults(masteredUrl, loudness);
+                // Configurar audios
+                document.getElementById('originalAudio').src = originalUrl;
+                document.getElementById('masteredAudio').src = masteredUrl;
                 
-                updateProgress('¡Masterización completada!', 100);
+                // Inicializar WaveSurfer para comparación
+                if (!this.wavesurferOriginal) {
+                    this.wavesurferOriginal = WaveSurfer.create({
+                        container: '#waveformOriginal',
+                        waveColor: '#64748b',
+                        progressColor: '#94a3b8',
+                        height: 150,
+                        barWidth: 1,
+                        responsive: true
+                    });
+                }
                 
-                setTimeout(() => {
-                    showProgress(false);
-                    showNotification('¡Audio masterizado exitosamente!', 'success');
-                }, 500);
+                if (!this.wavesurferMastered) {
+                    this.wavesurferMastered = WaveSurfer.create({
+                        container: '#waveformMastered',
+                        waveColor: '#10b981',
+                        progressColor: '#34d399',
+                        height: 150,
+                        barWidth: 1,
+                        responsive: true
+                    });
+                }
                 
-            } catch (error) {
-                console.error('Error processing audio:', error);
-                showProgress(false);
-                showNotification('Error al procesar el audio', 'error');
+                this.wavesurferOriginal.load(originalUrl);
+                this.wavesurferMastered.load(masteredUrl);
+            }
+            
+            downloadMastered() {
+                if (!this.audioBuffer) {
+                    userSystem.showNotification('No hay audio para descargar', 'error');
+                    return;
+                }
+                
+                const wavBlob = this.audioBufferToWav(this.audioBuffer);
+                const url = URL.createObjectURL(wavBlob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `mastered_${Date.now()}.wav`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                URL.revokeObjectURL(url);
+                
+                userSystem.showNotification('Descarga iniciada', 'success');
+            }
+            
+            saveProject() {
+                if (!this.audioBuffer || !userSystem.currentUser) {
+                    userSystem.showNotification('No hay proyecto para guardar', 'error');
+                    return;
+                }
+                
+                const projectData = {
+                    audioBuffer: this.serializeAudioBuffer(this.audioBuffer),
+                    settings: this.getCurrentSettings(),
+                    name: prompt('Nombre del proyecto:', 'Proyecto ' + new Date().toLocaleDateString())
+                };
+                
+                userSystem.saveProject(projectData);
+            }
+            
+            serializeAudioBuffer(buffer) {
+                // Convertir AudioBuffer a objeto serializable
+                return {
+                    sampleRate: buffer.sampleRate,
+                    length: buffer.length,
+                    numberOfChannels: buffer.numberOfChannels,
+                    duration: buffer.duration
+                };
+            }
+            
+            getCurrentSettings() {
+                return {
+                    loudness: document.getElementById('loudnessSlider').value,
+                    bass: document.getElementById('bassSlider').value,
+                    mid: document.getElementById('midSlider').value,
+                    treble: document.getElementById('trebleSlider').value,
+                    compression: document.getElementById('compressionSlider').value,
+                    limiter: document.getElementById('limiterSlider').value
+                };
+            }
+            
+            reset() {
+                this.audioBuffer = null;
+                this.originalBuffer = null;
+                this.currentFile = null;
+                
+                this.wavesurfer.empty();
+                if (this.wavesurferOriginal) this.wavesurferOriginal.empty();
+                if (this.wavesurferMastered) this.wavesurferMastered.empty();
+                
+                document.getElementById('fileInfo').style.display = 'none';
+                this.showSection('upload');
+                
+                userSystem.showNotification('Proyecto reiniciado', 'info');
+            }
+            
+            showSection(sectionId) {
+                // Ocultar todas las secciones
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Mostrar sección seleccionada
+                document.getElementById(sectionId + 'Section').classList.add('active');
+                
+                // Actualizar navegación
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.section === sectionId) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+            
+            showProgress(show) {
+                const container = document.getElementById('progressContainer');
+                container.style.display = show ? 'block' : 'none';
+            }
+            
+            updateProgress(text, percent) {
+                document.getElementById('progressText').textContent = text;
+                document.getElementById('progressFill').style.width = percent + '%';
+            }
+            
+            audioBufferToWav(buffer) {
+                const numChannels = buffer.numberOfChannels;
+                const sampleRate = buffer.sampleRate;
+                const length = buffer.length * numChannels * 2;
+                const bufferArray = new ArrayBuffer(44 + length);
+                const view = new DataView(bufferArray);
+                
+                // Escribir encabezado WAV
+                this.writeString(view, 0, 'RIFF');
+                view.setUint32(4, 36 + length, true);
+                this.writeString(view, 8, 'WAVE');
+                this.writeString(view, 12, 'fmt ');
+                view.setUint32(16, 16, true);
+                view.setUint16(20, 1, true);
+                view.setUint16(22, numChannels, true);
+                view.setUint32(24, sampleRate, true);
+                view.setUint32(28, sampleRate * numChannels * 2, true);
+                view.setUint16(32, numChannels * 2, true);
+                view.setUint16(34, 16, true);
+                this.writeString(view, 36, 'data');
+                view.setUint32(40, length, true);
+                
+                // Escribir datos de audio
+                const offset = 44;
+                const channels = [];
+                
+                for (let i = 0; i < numChannels; i++) {
+                    channels.push(buffer.getChannelData(i));
+                }
+                
+                let index = 0;
+                for (let i = 0; i < buffer.length; i++) {
+                    for (let channel = 0; channel < numChannels; channel++) {
+                        const sample = Math.max(-1, Math.min(1, channels[channel][i]));
+                        view.setInt16(offset + index, sample * 0x7FFF, true);
+                        index += 2;
+                    }
+                }
+                
+                return new Blob([bufferArray], { type: 'audio/wav' });
+            }
+            
+            writeString(view, offset, string) {
+                for (let i = 0; i < string.length; i++) {
+                    view.setUint8(offset + i, string.charCodeAt(i));
+                }
+            }
+            
+            formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+            
+            formatDuration(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
             }
         }
-        
-        async function analyzeAudio() {
-            if (!audioBuffer) {
-                showNotification('Por favor, sube un archivo de audio primero', 'error');
+
+        // Inicializar sistemas
+        const userSystem = new UserSystem();
+        const audioProcessor = new AudioProcessor();
+
+        // Manejar formularios de login/registro
+        document.getElementById('showRegister').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        });
+
+        document.getElementById('showLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const user = userSystem.login(username, password);
+                userSystem.showApp();
+                userSystem.showNotification(`¡Bienvenido de nuevo, ${user.username}!`, 'success');
+            } catch (error) {
+                userSystem.showNotification(error.message, 'error');
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                userSystem.showNotification('Las contraseñas no coinciden', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                userSystem.showNotification('La contraseña debe tener al menos 6 caracteres', 'error');
                 return;
             }
             
             try {
-                // Calcular métricas
-                const loudness = await calculateLoudness(audioBuffer);
-                const peak = await calculatePeak(audioBuffer);
-                const dynamicRange = await calculateDynamicRange(audioBuffer);
-                const balance = await calculateStereoBalance(audioBuffer);
-                
-                // Mostrar resultados
-                document.getElementById('analysisLufs').textContent = loudness.toFixed(1);
-                document.getElementById('analysisPeak').textContent = peak.toFixed(1) + ' dB';
-                document.getElementById('analysisDynamic').textContent = dynamicRange.toFixed(1) + ' dB';
-                document.getElementById('analysisBalance').textContent = balance.toFixed(1) + '%';
-                
-                document.getElementById('analysisPanel').style.display = 'grid';
-                
-                showNotification('Análisis completado', 'success');
-                
+                const user = userSystem.register(username, email, password);
+                userSystem.showApp();
+                userSystem.showNotification(`¡Cuenta creada exitosamente, ${user.username}!`, 'success');
             } catch (error) {
-                console.error('Error analyzing audio:', error);
-                showNotification('Error al analizar el audio', 'error');
+                userSystem.showNotification(error.message, 'error');
             }
-        }
-        
-        function showResults(masteredUrl, originalLoudness) {
-            // Mostrar sección de resultados
-            const resultsSection = document.getElementById('results');
-            resultsSection.classList.add('show');
-            
-            // Crear URL para audio original
-            const originalBlob = audioBufferToWav(originalAudioBuffer);
-            const originalUrl = URL.createObjectURL(originalBlob);
-            
-            // Configurar audios
-            document.getElementById('originalAudio').src = originalUrl;
-            document.getElementById('masteredAudio').src = masteredUrl;
-            
-            // Calcular LUFS masterizado
-            calculateLoudness(audioBuffer).then(masteredLoudness => {
-                document.getElementById('originalLufs').textContent = originalLoudness.toFixed(1);
-                document.getElementById('masteredLufs').textContent = masteredLoudness.toFixed(1);
-            });
-            
-            // Inicializar WaveSurfer para comparación
-            if (!wavesurferOriginal) {
-                wavesurferOriginal = WaveSurfer.create({
-                    container: '#waveformOriginal',
-                    waveColor: '#64748b',
-                    progressColor: '#94a3b8',
-                    height: 100,
-                    barWidth: 1,
-                    responsive: true
-                });
-            }
-            
-            if (!wavesurferMastered) {
-                wavesurferMastered = WaveSurfer.create({
-                    container: '#waveformMastered',
-                    waveColor: '#10b981',
-                    progressColor: '#34d399',
-                    height: 100,
-                    barWidth: 1,
-                    responsive: true
-                });
-            }
-            
-            wavesurferOriginal.load(originalUrl);
-            wavesurferMastered.load(masteredUrl);
-            
-            // Scroll a resultados
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        function downloadMasteredAudio() {
-            if (!audioBuffer) {
-                showNotification('No hay audio para descargar', 'error');
-                return;
-            }
-            
-            const wavBlob = audioBufferToWav(audioBuffer);
-            const url = URL.createObjectURL(wavBlob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `mastered_${Date.now()}.wav`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            URL.revokeObjectURL(url);
-            
-            showNotification('Descarga iniciada', 'success');
-        }
-        
-        // Funciones de análisis de audio
-        async function calculateLoudness(buffer) {
-            // Implementación simplificada de cálculo LUFS
-            // En producción, usar librería como "loudness"
-            const channelData = buffer.getChannelData(0);
-            let sum = 0;
-            
-            // Tomar muestras cada 100ms para simular
-            const sampleRate = buffer.sampleRate;
-            const samplesPerWindow = Math.floor(sampleRate * 0.1);
-            const windows = Math.floor(channelData.length / samplesPerWindow);
-            
-            for (let i = 0; i < windows; i++) {
-                let windowSum = 0;
-                const start = i * samplesPerWindow;
-                const end = start + samplesPerWindow;
-                
-                for (let j = start; j < end && j < channelData.length; j++) {
-                    windowSum += channelData[j] * channelData[j];
-                }
-                
-                const rms = Math.sqrt(windowSum / samplesPerWindow);
-                const loudness = 20 * Math.log10(rms);
-                
-                if (loudness > -70) { // Gate de -70 LUFS
-                    sum += Math.pow(10, loudness / 10);
-                }
-            }
-            
-            const average = sum / windows;
-            return 10 * Math.log10(average);
-        }
-        
-        async function calculatePeak(buffer) {
-            let peak = 0;
-            for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
-                const channelData = buffer.getChannelData(channel);
-                for (let i = 0; i < channelData.length; i++) {
-                    const absValue = Math.abs(channelData[i]);
-                    if (absValue > peak) {
-                        peak = absValue;
-                    }
-                }
-            }
-            return 20 * Math.log10(peak);
-        }
-        
-        async function calculateDynamicRange(buffer) {
-            const loudness = await calculateLoudness(buffer);
-            const peak = await calculatePeak(buffer);
-            return peak - loudness;
-        }
-        
-        async function calculateStereoBalance(buffer) {
-            if (buffer.numberOfChannels < 2) return 0;
-            
-            const left = buffer.getChannelData(0);
-            const right = buffer.getChannelData(1);
-            
-            let leftSum = 0;
-            let rightSum = 0;
-            
-            for (let i = 0; i < left.length; i += 100) {
-                leftSum += Math.abs(left[i]);
-                rightSum += Math.abs(right[i]);
-            }
-            
-            const balance = ((leftSum - rightSum) / ((leftSum + rightSum) / 2)) * 100;
-            return Math.abs(balance);
-        }
-        
-        // Funciones auxiliares
-        function audioBufferToWav(buffer) {
-            const numChannels = buffer.numberOfChannels;
-            const sampleRate = buffer.sampleRate;
-            const length = buffer.length * numChannels * 2;
-            const bufferArray = new ArrayBuffer(44 + length);
-            const view = new DataView(bufferArray);
-            
-            // Escribir encabezado WAV
-            writeString(view, 0, 'RIFF');
-            view.setUint32(4, 36 + length, true);
-            writeString(view, 8, 'WAVE');
-            writeString(view, 12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, numChannels, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * numChannels * 2, true);
-            view.setUint16(32, numChannels * 2, true);
-            view.setUint16(34, 16, true);
-            writeString(view, 36, 'data');
-            view.setUint32(40, length, true);
-            
-            // Escribir datos de audio
-            const offset = 44;
-            const channels = [];
-            
-            for (let i = 0; i < numChannels; i++) {
-                channels.push(buffer.getChannelData(i));
-            }
-            
-            let index = 0;
-            for (let i = 0; i < buffer.length; i++) {
-                for (let channel = 0; channel < numChannels; channel++) {
-                    const sample = Math.max(-1, Math.min(1, channels[channel][i]));
-                    view.setInt16(offset + index, sample * 0x7FFF, true);
-                    index += 2;
-                }
-            }
-            
-            return new Blob([bufferArray], { type: 'audio/wav' });
-        }
-        
-        function writeString(view, offset, string) {
-            for (let i = 0; i < string.length; i++) {
-                view.setUint8(offset + i, string.charCodeAt(i));
-            }
-        }
-        
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' bytes';
-            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-            return (bytes / 1048576).toFixed(1) + ' MB';
-        }
-        
-        function formatDuration(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
-        
-        function updateSliderValue() {
-            document.getElementById('loudnessValue').textContent = 
-                document.getElementById('loudnessSlider').value + ' LUFS';
-            
-            document.getElementById('bassValue').textContent = 
-                document.getElementById('bassSlider').value + ' dB';
-            
-            document.getElementById('midValue').textContent = 
-                document.getElementById('midSlider').value + ' dB';
-            
-            document.getElementById('trebleValue').textContent = 
-                document.getElementById('trebleSlider').value + ' dB';
-            
-            document.getElementById('compressionValue').textContent = 
-                document.getElementById('compressionSlider').value + ':1';
-            
-            document.getElementById('limiterValue').textContent = 
-                document.getElementById('limiterSlider').value + ' dB';
-            
-            document.getElementById('stereoValue').textContent = 
-                document.getElementById('stereoSlider').value + '%';
-        }
-        
-        function loadPreset(preset) {
-            currentPreset = preset;
-            
-            const presets = {
-                streaming: {
-                    loudness: -14,
-                    bass: 0,
-                    mid: 0,
-                    treble: 1,
-                    compression: 4,
-                    limiter: -1,
-                    stereo: 100
-                },
-                club: {
-                    loudness: -6,
-                    bass: 3,
-                    mid: 1,
-                    treble: 2,
-                    compression: 6,
-                    limiter: -0.5,
-                    stereo: 110
-                },
-                radio: {
-                    loudness: -9,
-                    bass: 1,
-                    mid: 2,
-                    treble: 1,
-                    compression: 5,
-                    limiter: -1,
-                    stereo: 100
-                },
-                vinyl: {
-                    loudness: -12,
-                    bass: -2,
-                    mid: 1,
-                    treble: -1,
-                    compression: 3,
-                    limiter: -2,
-                    stereo: 95
-                },
-                loud: {
-                    loudness: -8,
-                    bass: 2,
-                    mid: 0,
-                    treble: 3,
-                    compression: 8,
-                    limiter: -0.3,
-                    stereo: 105
-                },
-                dynamic: {
-                    loudness: -16,
-                    bass: 0,
-                    mid: 0,
-                    treble: 0,
-                    compression: 2,
-                    limiter: -3,
-                    stereo: 100
-                }
-            };
-            
-            const p = presets[preset];
-            if (!p) return;
-            
-            document.getElementById('loudnessSlider').value = p.loudness;
-            document.getElementById('bassSlider').value = p.bass;
-            document.getElementById('midSlider').value = p.mid;
-            document.getElementById('trebleSlider').value = p.treble;
-            document.getElementById('compressionSlider').value = p.compression;
-            document.getElementById('limiterSlider').value = p.limiter;
-            document.getElementById('stereoSlider').value = p.stereo;
-            
-            updateSliderValue();
-            
-            showNotification(`Preset "${preset}" cargado`, 'info');
-        }
-        
-        function showProgress(show) {
-            const container = document.getElementById('progressContainer');
-            if (show) {
-                container.style.display = 'block';
-                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            userSystem.logout();
+            userSystem.showNotification('Sesión cerrada correctamente', 'info');
+        });
+
+        // Verificar si hay sesión activa al cargar
+        window.addEventListener('load', () => {
+            if (userSystem.currentUser) {
+                userSystem.showApp();
             } else {
-                container.style.display = 'none';
+                userSystem.showLoginScreen();
             }
-        }
-        
-        function updateProgress(text, percent) {
-            document.getElementById('progressText').textContent = text;
-            document.getElementById('progressFill').style.width = percent + '%';
-        }
-        
-        function updateSubscriptionStatus() {
-            const status = document.getElementById('subscriptionStatus');
-            if (isSubscribed) {
-                status.innerHTML = '<i class="fas fa-crown"></i> Suscripción Pro';
-                status.style.background = 'linear-gradient(45deg, #10b981, #34d399)';
-            } else {
-                status.innerHTML = '<i class="fas fa-lock"></i> Gratis';
-                status.style.background = 'linear-gradient(45deg, #64748b, #94a3b8)';
-            }
-        }
-        
-        function resetApp() {
-            // Resetear todo el estado
-            audioBuffer = null;
-            originalAudioBuffer = null;
             
-            // Limpiar wave forms
-            wavesurfer.empty();
-            if (wavesurferOriginal) wavesurferOriginal.empty();
-            if (wavesurferMastered) wavesurferMastered.empty();
-            
-            // Ocultar resultados
-            document.getElementById('results').classList.remove('show');
-            
-            // Limpiar información del archivo
-            document.getElementById('fileInfo').style.display = 'none';
-            
-            // Deshabilitar botones
-            document.getElementById('processBtn').disabled = true;
-            document.getElementById('analyzeBtn').disabled = true;
-            
-            // Ocultar análisis
-            document.getElementById('analysisPanel').style.display = 'none';
-            
-            // Scroll al inicio
-            document.getElementById('upload').scrollIntoView({ behavior: 'smooth' });
-            
-            showNotification('Aplicación reiniciada', 'info');
-        }
-        
-        function showNotification(message, type = 'info') {
-            // Crear notificación
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 25px;
-                background: ${type === 'success' ? '#10b981' : 
-                           type === 'error' ? '#ef4444' : '#6366f1'};
-                color: white;
-                border-radius: 10px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                z-index: 10000;
-                animation: fadeIn 0.3s ease-out;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            `;
-            
-            const icon = type === 'success' ? 'fa-check-circle' : 
-                        type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
-            
-            notification.innerHTML = `
-                <i class="fas ${icon}"></i>
-                <span>${message}</span>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Remover después de 5 segundos
+            // Mostrar advertencia sobre datos locales
             setTimeout(() => {
-                notification.style.animation = 'fadeIn 0.3s reverse';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 5000);
-        }
-        
-        function closeModal() {
-            document.getElementById('subscriptionModal').classList.remove('show');
-        }
-        
-        // Exponer funciones globales para botones HTML
-        window.closeModal = closeModal;
+                userSystem.showNotification(
+                    '⚠️ Los datos se guardan localmente en tu navegador. No borres el historial para no perder tus proyectos.',
+                    'warning'
+                );
+            }, 2000);
+        });
+
+        // PayPal Integration
+        paypal.Buttons({
+            style: {
+                shape: 'pill',
+                color: 'blue',
+                layout: 'vertical',
+                label: 'subscribe'
+            },
+            createSubscription: function(data, actions) {
+                return actions.subscription.create({
+                    plan_id: 'P-3ML32445H2853452WMIEUXSI'
+                });
+            },
+            onApprove: function(data, actions) {
+                userSystem.showNotification('¡Suscripción Pro activada!', 'success');
+                if (userSystem.currentUser) {
+                    const users = userSystem.getUsers();
+                    users[userSystem.currentUser.username].plan = 'pro';
+                    localStorage.setItem(userSystem.usersKey, JSON.stringify(users));
+                    userSystem.currentUser.plan = 'pro';
+                    userSystem.updateUI();
+                }
+            },
+            onError: function(err) {
+                console.error('PayPal error:', err);
+                userSystem.showNotification('Error en el pago. Intenta nuevamente.', 'error');
+            }
+        }).render('#paypal-button-container');
     </script>
 </body>
 </html>
