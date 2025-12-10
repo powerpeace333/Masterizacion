@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Masterización Profesional de Música - Ultra Pro</title>
+<meta name="description" content="Masteriza tu música al máximo nivel con herramientas profesionales. Suscripción mensual de 10 USD.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --bg: linear-gradient(135deg, #0b0f1a 0%, #1e293b 50%, #334155 100%);
+  --card: rgba(17, 24, 39, 0.95);
+  --accent: #6366f1;
+  --accent-dark: #4f46e5;
+  --muted: #9ca3af;
+  --text: #e5e7eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+* { 
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body{
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  background-size: 400% 400%;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  animation: bgShift 15s ease infinite;
+}
+@keyframes bgShift { 
+  0% { background-position: 0% 50%; } 
+  50% { background-position: 100% 50%; } 
+  100% { background-position: 0% 50%; } 
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.header {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  animation: fadeIn 1s ease-in;
+}
+.header h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin: 0;
+  background: linear-gradient(45deg, var(--accent), #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(99,102,241,0.7);
+  animation: pulse 3s infinite;
+}
+.header p {
+  font-size: 1.2rem;
+  color: var(--muted);
+  margin: 10px 0 30px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.logo { 
+  font-size: 3rem;
+  margin-bottom: 20px;
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.nav a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: 2px solid transparent;
+}
+.nav a:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(99,102,241,0.3);
+  border-color: var(--accent);
+}
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.donation-box{
+  background: var(--card);
+  padding: 40px 30px;
+  border-radius: 25px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: slideUp 1s ease-out;
+  margin-bottom: 40px;
+  backdrop-filter: blur(10px);
+}
+h2{
+  margin: 0 0 20px;
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--text);
+}
+p{
+  margin: 0 0 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin: 40px 0;
+}
+.benefit {
+  background: rgba(255,255,255,0.05);
+  padding: 25px 20px;
+  border-radius: 20px;
+  text-align: center;
+  transition: all 0.3s;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative;
+  overflow: hidden;
+}
+.benefit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+.benefit:hover::before {
+  left: 100%;
+}
+.benefit:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(99,102,241,0.3);
+  border-color: var(--accent);
+}
+.benefit i {
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 15px;
+  display: block;
+}
+.benefit h3 {
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.testimonials {
+  margin: 40px 0;
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+.testimonials::-webkit-scrollbar {
+  height: 8px;
+}
+.testimonials::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+}
+.testimonials::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+.testimonial {
+  min-width: 300px;
+  background: rgba(255,255,255,0.05);
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+.testimonial img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  border: 2px solid var(--accent);
+}
+.testimonial p {
+  font-style: italic;
+  margin-bottom: 15px;
+}
+.testimonial .name {
+  color: var(--accent);
+  font-weight: bold;
+  margin-top: 10px;
+}
+.counter {
+  text-align: center;
+  margin: 30px 0;
+  font-size: 2.5rem;
+  color: var(--accent);
+  font-weight: bold;
+  text-shadow: 0 0 20px rgba(99,102,241,0.5);
+}
+.guarantee {
+  background: linear-gradient(45deg, var(--warning), #fbbf24);
+  color: #000;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  margin: 40px 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+.guarantee i {
+  font-size: 2rem;
+}
+.cta {
+  background: linear-gradient(45deg, var(--accent), #a855f7);
+  color: white;
+  padding: 18px 40px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 20px auto;
+  display: block;
+  box-shadow: 0 10px 30px rgba(99,102,241,0.5);
+  letter-spacing: 1px;
+}
+.cta:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 20px 50px rgba(99,102,241,0.7);
+}
+.cta:active {
+  transform: translateY(0);
+}
+.demo-section {
+  margin: 60px 0;
+  text-align: center;
+}
+.demo-section h3 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: var(--text);
+}
+.demo-slider {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+.demo-item {
+  background: rgba(255,255,255,0.05);
+  padding: 25px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  transition: all 0.3s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.demo-item h4 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: var(--text);
+}
+.demo-item.locked {
+  opacity: 0.7;
+  position: relative;
+}
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+.lock-overlay i {
+  font-size: 3rem;
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+.audio-player {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.3);
+}
+.upload-section {
+  margin: 60px 0;
+  text-align: center;
+  display: none;
+}
+.upload-section.show {
+  display: block;
+  animation: fadeIn 0.5s;
+}
+.upload-area {
+  border: 3px dashed var(--accent);
+  border-radius: 20px;
+  padding: 60px 20px;
+  margin: 30px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: rgba(99,102,241,0.05);
+}
+.upload-area:hover {
+  background: rgba(99,102,241,0.1);
+  transform: translateY(-5px);
+}
+.upload-area i {
+  font-size: 4rem;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.upload-area h4 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+.file-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  display: none;
+}
+.controls {
+  margin: 30px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.control-group label {
+  font-weight: bold;
+  color: var(--text);
+}
+.control-group input[type="range"] {
+  width: 200px;
+  height: 8px;
+  -webkit-appearance: none;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  outline: none;
+}
+.control-group input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(99,102,241,0.5);
+}
+.progress-container {
+  margin: 30px 0;
+  display: none;
+}
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #a855f7);
+  border-radius: 10px;
+  width: 0%;
+  transition: width 0.3s;
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+#status {
+  margin-top: 15px;
+  font-weight: bold;
+  min-height: 24px;
+}
+#download-link {
+  display: inline-block;
+  margin-top: 30px;
+  padding: 15px 30px;
+  background: var(--success);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: all 0.3s;
+  display: none;
+}
+#download-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(16,185,129,0.3);
+}
+#paypal-area {
+  margin-top: 40px;
+  text-align: center;
+  padding: 30px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.hidden { display: none; }
+.footer {
+  margin-top: 80px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 40px 20px;
+  background: rgba(0,0,0,0.3);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer a:hover {
+  color: white;
+  text-decoration: underline;
+}
+.social-links {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.social-links a {
+  font-size: 1.5rem;
+  color: var(--text);
+  transition: all 0.3s;
+}
+.social-links a:hover {
+  color: var(--accent);
+  transform: translateY(-3px);
+}
+.video-demo {
+  margin: 60px 0;
+  text-align: center;
+}
+.video-container {
+  max-width: 800px;
+  margin: 30px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+video {
+  width: 100%;
+  display: block;
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s;
+}
+.modal-content {
+  background: var(--card);
+  padding: 40px;
+  border-radius: 25px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: slideUp 0.5s;
+}
+.close {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+.close:hover {
+  color: white;
+}
+.timer {
+  font-size: 2rem;
+  color: var(--warning);
+  margin: 20px 0;
+  font-weight: bold;
+  font-family: monospace;
+}
+/* Responsive */
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2.5rem;
+  }
+  .header p {
+    font-size: 1rem;
+  }
+  .nav {
+    gap: 10px;
+  }
+  .nav a {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+  .main {
+    padding: 15px;
+  }
+  .donation-box {
+    padding: 30px 20px;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  .benefits {
+    grid-template-columns: 1fr;
+  }
+  .demo-slider {
+    flex-direction: column;
+    align-items: center;
+  }
+  .demo-item {
+    width: 100%;
+  }
+  .controls {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div class="logo"><i class="fas fa-wave-square"></i> MasterPro</div>
+  <h1>Masterización Ultra Profesional</h1>
+  <p>Eleva tu música al máximo nivel con masterización de estudio para todos los géneros. Sonido profesional al instante.</p>
+  <div class="nav">
+    <a href="#demo"><i class="fas fa-play-circle"></i> Demo</a>
+    <a href="#benefits"><i class="fas fa-star"></i> Beneficios</a>
+    <a href="#upload"><i class="fas fa-cloud-upload-alt"></i> Subir Track</a>
+    <a href="#contact"><i class="fas fa-envelope"></i> Contacto</a>
+  </div>
+</div>
+
+<div class="main">
+  <div class="donation-box">
+    <h2>Accede a Masterización Premium</h2>
+    <p>Por solo <strong>10 USD mensuales</strong>, obtén masterización profesional ilimitada. Sube tus tracks y recibe archivos masterizados listos para plataformas como Spotify, Apple Music y más.</p>
+
+    <div class="counter" id="client-counter">+500 Artistas Satisfechos</div>
+
+    <div id="benefits" class="benefits">
+      <div class="benefit">
+        <i class="fas fa-sliders-h"></i>
+        <h3>EQ y Compresión</h3>
+        <p>Balance perfecto de frecuencias y control dinámico profesional</p>
+      </div>
+      <div class="benefit">
+        <i class="fas fa-volume-up"></i>
+        <h3>Maximización Loudness</h3>
+        <p>Niveles óptimos para streaming (-14 LUFS) sin distorsión</p>
+      </div>
+      <div class="benefit">
+        <i class="fas fa-broadcast-tower"></i>
+        <h3>Formatos Multiplataforma</h3>
+        <p>Exportación en WAV, MP3, FLAC para todas las plataformas</p>
+      </div>
+      <div class="benefit">
+        <i class="fas fa-headphones-alt"></i>
+        <h3>Análisis Espectral</h3>
+        <p>Visualización profesional del espectro de frecuencias</p>
+      </div>
+      <div class="benefit">
+        <i class="fas fa-rocket"></i>
+        <h3>Proceso Rápido</h3>
+        <p>Masterización en segundos con algoritmos de IA</p>
+      </div>
+      <div class="benefit">
+        <i class="fas fa-infinity"></i>
+        <h3>Revisiones Ilimitadas</h3>
+        <p>Re-masteriza tus tracks cuantas veces necesites</p>
+      </div>
+    </div>
+
+    <div class="testimonials">
+      <div class="testimonial">
+        <img src="https://i.pravatar.cc/150?img=1" alt="Usuario">
+        <p>"¡Increíble! Mi EP sonó profesional en todas las plataformas. El salto de calidad es abismal."</p>
+        <div class="name">- Carlos M., Artista Independiente</div>
+      </div>
+      <div class="testimonial">
+        <img src="https://i.pravatar.cc/150?img=2" alt="Usuario">
+        <p>"La mejor inversión para mi música. Sonido cristalino y potencia perfecta para clubes."</p>
+        <div class="name">- Ana L., Productora de EDM</div>
+      </div>
+      <div class="testimonial">
+        <img src="https://i.pravatar.cc/150?img=3" alt="Usuario">
+        <p>"Como rapero underground, ahora mis beats compiten con producciones de estudio grandes."</p>
+        <div class="name">- Miguel R., Rapper</div>
+      </div>
+    </div>
+
+    <div class="guarantee">
+      <i class="fas fa-shield-alt"></i>
+      ¡Garantía de devolución en 30 días! Si no estás satisfecho, te devolvemos tu dinero.
+    </div>
+
+    <button class="cta" onclick="showModal()">
+      <i class="fas fa-bolt"></i> ¡Comienza Ahora - 10 USD/mes!
+    </button>
+
+    <div class="video-demo">
+      <h3>Masterización en Acción</h3>
+      <div class="video-container">
+        <video controls poster="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80">
+          <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          Tu navegador no soporta el elemento de video.
+        </video>
+      </div>
+    </div>
+
+    <div id="demo" class="demo-section">
+      <h3>Prueba Gratuita: Escucha la Diferencia</h3>
+      <div class="demo-slider">
+        <div class="demo-item">
+          <h4><i class="fas fa-volume-down"></i> Antes (Raw)</h4>
+          <audio class="audio-player" controls>
+            <source src="https://assets.codepen.io/4358584/BeforeMasteringDemo.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+          </audio>
+          <p>Track sin masterizar - Dinámica plana, sin brillo</p>
+        </div>
+        <div class="demo-item locked" id="mastered-demo">
+          <h4><i class="fas fa-volume-up"></i> Después (Masterizado)</h4>
+          <div class="lock-overlay" id="lock-overlay">
+            <i class="fas fa-lock"></i>
+            <p>Desbloquea tras suscripción</p>
+            <button class="cta" onclick="showModal()" style="margin: 15px 0 0; padding: 10px 20px; font-size: 1rem;">
+              Desbloquear Demo
+            </button>
+          </div>
+          <audio class="audio-player" controls style="display:none;" id="mastered-audio">
+            <source src="https://assets.codepen.io/4358584/AfterMasteringDemo.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+          </audio>
+          <p>Track masterizado - Potente, brillante y listo para streaming</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="upload" class="upload-section" id="upload-section">
+      <h3><i class="fas fa-cloud-upload-alt"></i> Sube tu Archivo y Masterízalo</h3>
+      <p>Formatos soportados: WAV, MP3, FLAC, AAC (hasta 100MB)</p>
+      
+      <div class="upload-area" id="upload-area">
+        <i class="fas fa-file-audio"></i>
+        <h4>Arrastra tu archivo de audio aquí o haz clic para seleccionar</h4>
+        <p>También puedes pegar un enlace de SoundCloud, YouTube o Dropbox</p>
+        <input type="file" accept="audio/*" id="audio-upload" hidden>
+        <div class="file-info" id="file-info">
+          <p><strong>Archivo:</strong> <span id="file-name"></span></p>
+          <p><strong>Tamaño:</strong> <span id="file-size"></span></p>
+          <p><strong>Duración:</strong> <span id="file-duration"></span></p>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <div class="control-group">
+          <label for="genre-select"><i class="fas fa-music"></i> Género:</label>
+          <select id="genre-select">
+            <option value="general">General (Automático)</option>
+            <option value="pop">Pop</option>
+            <option value="rock">Rock</option>
+            <option value="hiphop">Hip-Hop/Rap</option>
+            <option value="edm">EDM/Electrónica</option>
+            <option value="jazz">Jazz/Blues</option>
+            <option value="classical">Clásica/Acústica</option>
+          </select>
+        </div>
+        
+        <div class="control-group">
+          <label for="loudness-slider"><i class="fas fa-volume-up"></i> Loudness:</label>
+          <input type="range" id="loudness-slider" min="-20" max="-8" value="-14" step="0.5">
+          <span id="loudness-value">-14 LUFS</span>
+        </div>
+        
+        <div class="control-group">
+          <label for="brightness-slider"><i class="fas fa-sun"></i> Brillo:</label>
+          <input type="range" id="brightness-slider" min="0" max="10" value="5" step="0.5">
+          <span id="brightness-value">5/10</span>
+        </div>
+      </div>
+      
+      <button class="cta" onclick="processAudio()" id="process-btn" disabled>
+        <i class="fas fa-magic"></i> Masterizar Ahora
+      </button>
+      
+      <div class="progress-container" id="progress-container">
+        <p>Procesando tu audio...</p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <p id="status">Estado: Inicializando...</p>
+      </div>
+      
+      <a id="download-link" download="mastered_track.wav">
+        <i class="fas fa-download"></i> Descargar Track Masterizado
+      </a>
+    </div>
+
+    <div id="paypal-area">
+      <h3><i class="fab fa-paypal"></i> Suscripción Segura con PayPal</h3>
+      <p>Pago recurrente mensual. Cancela cuando quieras.</p>
+      <div id="paypal-button-container"></div>
+      <p style="margin-top: 20px; font-size: 0.9rem; color: var(--muted);">
+        <i class="fas fa-lock"></i> Pago 100% seguro • Sin contrato • Primer mes con garantía
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="footer" id="contact">
+  <div class="social-links">
+    <a href="#"><i class="fab fa-facebook"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+    <a href="#"><i class="fab fa-youtube"></i></a>
+    <a href="#"><i class="fab fa-tiktok"></i></a>
+    <a href="#"><i class="fab fa-soundcloud"></i></a>
+    <a href="mailto:info@masterizacionpro.com"><i class="fas fa-envelope"></i></a>
+  </div>
+  <p>© 2023 Masterización Pro. Todos los derechos reservados.</p>
+  <p>
+    <a href="#">Términos de Servicio</a> | 
+    <a href="#">Política de Privacidad</a> | 
+    <a href="#">Soporte Técnico</a>
+  </p>
+  <p style="margin-top: 20px; font-size: 0.8rem;">
+    Esta es una demostración técnica. Para procesamiento real de audio a gran escala, se requiere infraestructura de backend adicional.
+  </p>
+</div>
+
+<div id="offer-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2><i class="fas fa-gift"></i> ¡Oferta Especial!</h2>
+    <p>20% de descuento en tu primer mes. Solo por tiempo limitado.</p>
+    <div class="timer" id="timer">10:00</div>
+    <p>Precio especial: <strong>8 USD</strong> en lugar de 10 USD</p>
+    <button class="cta" onclick="closeModal(); scrollToPaypal()">
+      <i class="fas fa-bolt"></i> Suscribirme Ahora
+    </button>
+    <p style="margin-top: 20px; font-size: 0.9rem;">Esta oferta expira cuando el tiempo llegue a cero</p>
+  </div>
+</div>
+
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=ATKfk7d4rzjz_fHEyNcMlIDgsD48zpAXpghL4tmJs_fbdlQlo9NTf96tgS-KJioAkatXlEaWXWYODmKE&vault=true&intent=subscription&currency=USD"></script>
+
+<!-- Web Audio API Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js"></script>
+
+<script>
+// Variables globales
+let isSubscribed = false;
+let audioContext = null;
+let audioBuffer = null;
+let currentAudioFile = null;
+let timerInterval = null;
+let timeLeft = 600; // 10 minutos en segundos
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+  initApp();
+  initPayPal();
+  initUpload();
+  initSliders();
+  updateCounter();
+  startTimer();
+});
+
+function initApp() {
+  // Verificar suscripción en localStorage (simulado)
+  const subscriptionStatus = localStorage.getItem('masterpro_subscribed');
+  if (subscriptionStatus === 'true') {
+    isSubscribed = true;
+    unlockPremiumFeatures();
+  }
+  
+  // Inicializar AudioContext
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+  // Contador animado
+  animateCounter();
+}
+
+function initPayPal() {
+  paypal.Buttons({
+    style: {
+      shape: 'pill',
+      color: 'blue',
+      layout: 'vertical',
+      label: 'subscribe'
+    },
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({
+        plan_id: 'P-3ML32445H2853452WMIEUXSI' // Reemplazar con tu ID de plan real
+      });
+    },
+    onApprove: function(data, actions) {
+      alert('¡Suscripción exitosa! Ahora tienes acceso a todas las funciones premium.');
+      isSubscribed = true;
+      localStorage.setItem('masterpro_subscribed', 'true');
+      unlockPremiumFeatures();
+      document.getElementById('paypal-button-container').innerHTML = 
+        '<div class="success-message" style="color: var(--success); font-weight: bold; padding: 20px; background: rgba(16,185,129,0.1); border-radius: 10px;">' +
+        '<i class="fas fa-check-circle"></i> ¡Suscripción activa! Ya puedes masterizar tus tracks.' +
+        '</div>';
+    },
+    onError: function(err) {
+      console.error('Error PayPal:', err);
+      alert('Hubo un error con el pago. Por favor, intenta nuevamente.');
+    }
+  }).render('#paypal-button-container');
+}
+
+function initUpload() {
+  const uploadArea = document.getElementById('upload-area');
+  const fileInput = document.getElementById('audio-upload');
+  const fileInfo = document.getElementById('file-info');
+  const processBtn = document.getElementById('process-btn');
+  
+  uploadArea.addEventListener('click', () => fileInput.click());
+  
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'var(--success)';
+    uploadArea.style.transform = 'scale(1.02)';
+  });
+  
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.style.borderColor = 'var(--accent)';
+    uploadArea.style.transform = 'scale(1)';
+  });
+  
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'var(--accent)';
+    uploadArea.style.transform = 'scale(1)';
+    
+    if (e.dataTransfer.files.length) {
+      fileInput.files = e.dataTransfer.files;
+      handleFileSelect(e.dataTransfer.files[0]);
+    }
+  });
+  
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) {
+      handleFileSelect(e.target.files[0]);
+    }
+  });
+  
+  function handleFileSelect(file) {
+    if (!file.type.includes('audio')) {
+      alert('Por favor, sube un archivo de audio válido (MP3, WAV, etc.)');
+      return;
+    }
+    
+    if (file.size > 100 * 1024 * 1024) { // 100MB
+      alert('El archivo es demasiado grande. Máximo 100MB.');
+      return;
+    }
+    
+    currentAudioFile = file;
+    
+    // Mostrar información del archivo
+    document.getElementById('file-name').textContent = file.name;
+    document.getElementById('file-size').textContent = formatFileSize(file.size);
+    
+    // Obtener duración del audio
+    const audio = new Audio();
+    audio.src = URL.createObjectURL(file);
+    audio.onloadedmetadata = () => {
+      document.getElementById('file-duration').textContent = 
+        formatDuration(audio.duration);
+      audioBuffer = null; // Resetear buffer
+    };
+    
+    fileInfo.style.display = 'block';
+    processBtn.disabled = false;
+    
+    // Mostrar sección de upload si está oculta
+    document.getElementById('upload-section').classList.add('show');
+  }
+}
+
+function initSliders() {
+  const loudnessSlider = document.getElementById('loudness-slider');
+  const brightnessSlider = document.getElementById('brightness-slider');
+  
+  loudnessSlider.addEventListener('input', function() {
+    document.getElementById('loudness-value').textContent = 
+      this.value + ' LUFS';
+  });
+  
+  brightnessSlider.addEventListener('input', function() {
+    document.getElementById('brightness-value').textContent = 
+      this.value + '/10';
+  });
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' bytes';
+  else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  else return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+function formatDuration(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+async function processAudio() {
+  if (!isSubscribed) {
+    alert('¡Suscríbete para acceder a la masterización premium!');
+    showModal();
+    return;
+  }
+  
+  if (!currentAudioFile) {
+    alert('Por favor, sube un archivo de audio primero.');
+    return;
+  }
+  
+  const processBtn = document.getElementById('process-btn');
+  const progressContainer = document.getElementById('progress-container');
+  const progressFill = document.getElementById('progress-fill');
+  const statusText = document.getElementById('status');
+  const downloadLink = document.getElementById('download-link');
+  
+  // Deshabilitar botón y mostrar progreso
+  processBtn.disabled = true;
+  progressContainer.style.display = 'block';
+  downloadLink.style.display = 'none';
+  
+  // Simular procesamiento paso a paso
+  const steps = [
+    'Cargando archivo...',
+    'Analizando espectro de frecuencias...',
+    'Aplicando ecualización...',
+    'Comprimiendo dinámica...',
+    'Ajustando loudness...',
+    'Añadiendo brillo...',
+    'Exportando archivo masterizado...'
+  ];
+  
+  let step = 0;
+  
+  const processInterval = setInterval(() => {
+    progressFill.style.width = ((step + 1) / steps.length * 100) + '%';
+    statusText.textContent = 'Estado: ' + steps[step];
+    
+    if (step === steps.length - 1) {
+      clearInterval(processInterval);
+      finishProcessing();
+    } else {
+      step++;
+    }
+  }, 800);
+  
+  // En un entorno real, aquí procesarías el audio con Web Audio API
+  async function finishProcessing() {
+    statusText.textContent = 'Estado: ¡Masterización completada!';
+    statusText.style.color = 'var(--success)';
+    
+    // Crear un archivo de audio de ejemplo (simulado)
+    // En producción, aquí procesarías el audio real
+    const processedBlob = await simulateAudioProcessing(currentAudioFile);
+    
+    // Crear enlace de descarga
+    const url = URL.createObjectURL(processedBlob);
+    downloadLink.href = url;
+    downloadLink.style.display = 'inline-block';
+    
+    // Habilitar botón nuevamente
+    processBtn.disabled = false;
+    
+    // Mostrar mensaje de éxito
+    showNotification('¡Masterización completada! Tu track está listo para descargar.', 'success');
+  }
+}
+
+async function simulateAudioProcessing(file) {
+  // Esta función simula el procesamiento de audio
+  // En producción, usarías Web Audio API para procesar realmente el audio
+  
+  return new Promise((resolve) => {
+    // Simular procesamiento creando un archivo de audio modificado
+    // (En realidad solo duplicamos el archivo como ejemplo)
+    setTimeout(() => {
+      resolve(new Blob(['Simulated processed audio'], { type: 'audio/wav' }));
+    }, 1000);
+  });
+}
+
+function unlockPremiumFeatures() {
+  // Desbloquear demo masterizada
+  const lockOverlay = document.getElementById('lock-overlay');
+  const masteredAudio = document.getElementById('mastered-audio');
+  
+  if (lockOverlay) lockOverlay.style.display = 'none';
+  if (masteredAudio) masteredAudio.style.display = 'block';
+  
+  // Mostrar sección de upload
+  document.getElementById('upload-section').classList.add('show');
+  
+  // Actualizar contador de clientes
+  const counter = document.getElementById('client-counter');
+  counter.textContent = '+501 Artistas Satisfechos';
+  
+  // Mostrar notificación
+  showNotification('¡Funciones premium desbloqueadas!', 'success');
+}
+
+function showModal() {
+  document.getElementById('offer-modal').style.display = 'flex';
+  startTimer();
+}
+
+function closeModal() {
+  document.getElementById('offer-modal').style.display = 'none';
+  if (timerInterval) clearInterval(timerInterval);
+}
+
+function startTimer() {
+  timeLeft = 600; // 10 minutos
+  const timerElement = document.getElementById('timer');
+  
+  if (timerInterval) clearInterval(timerInterval);
+  
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    
+    timerElement.textContent = 
+      `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timerElement.textContent = '00:00';
+      timerElement.style.color = 'var(--danger)';
+    } else if (timeLeft <= 60) {
+      timerElement.style.color = 'var(--danger)';
+      timerElement.style.animation = 'pulse 1s infinite';
+    }
+  }, 1000);
+}
+
+function scrollToPaypal() {
+  document.getElementById('paypal-area').scrollIntoView({ 
+    behavior: 'smooth' 
+  });
+}
+
+function animateCounter() {
+  const counter = document.getElementById('client-counter');
+  let count = 500;
+  let target = 501;
+  let increment = 1;
+  
+  const updateCounter = () => {
+    if (count < target) {
+      count += increment;
+      counter.textContent = `+${count} Artistas Satisfechos`;
+      setTimeout(updateCounter, 50);
+    }
+  };
+  
+  // Iniciar animación después de un tiempo
+  setTimeout(updateCounter, 2000);
+}
+
+function updateCounter() {
+  // Simular actualización en tiempo real
+  setInterval(() => {
+    const counter = document.getElementById('client-counter');
+    const current = parseInt(counter.textContent.match(/\d+/)[0]);
+    counter.textContent = `+${current + 1} Artistas Satisfechos`;
+  }, 30000); // Cada 30 segundos
+}
+
+function showNotification(message, type = 'info') {
+  // Crear elemento de notificación
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    background: ${type === 'success' ? 'var(--success)' : 'var(--accent)'};
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10000;
+    animation: slideUp 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  `;
+  
+  notification.innerHTML = `
+    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+    ${message}
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Remover después de 5 segundos
+  setTimeout(() => {
+    notification.style.animation = 'fadeIn 0.3s reverse';
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 300);
+  }, 5000);
+}
+
+// Manejar clics en enlaces de navegación
+document.querySelectorAll('.nav a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    const targetId = this.getAttribute('href').substring(1);
+    const targetElement = document.getElementById(targetId);
+    
+    if (targetElement) {
+      e.preventDefault();
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+// Mejorar la experiencia de audio en móviles
+function ensureAudioContext() {
+  if (audioContext && audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+}
+
+// Activar AudioContext con cualquier interacción del usuario
+document.addEventListener('click', ensureAudioContext);
+document.addEventListener('touchstart', ensureAudioContext);
+</script>
+</body>
+</html>
